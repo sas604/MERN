@@ -10,5 +10,5 @@ router.get(
   appControler.checkCredentials,
   appControler.getUsers
 );
-
+router.post('/api/search', appControler.search);
 module.exports = router;

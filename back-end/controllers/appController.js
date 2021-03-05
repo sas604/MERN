@@ -1,6 +1,9 @@
 const QuickBooks = require('node-quickbooks');
 const OAuthClient = require('intuit-oauth');
+require('dotenv').config();
+const querystring = require('querystring');
 const mongoose = require('mongoose');
+const Customer = require('../models/Customer');
 
 const oauthClient = new OAuthClient({
   clientId: process.env.QUICKBOOKS_USER_NAME,
@@ -11,7 +14,7 @@ const oauthClient = new OAuthClient({
 
 exports.login = (req, res) => {
   const authUri = oauthClient.authorizeUri({
-    scope: [OAuthClient.scopes.Accounting],
+    scope: [OAuthClient.scopes.Accounting, OAuthClient.scopes.OpenId],
     state: 'intuit-test',
   });
 
@@ -42,12 +45,20 @@ exports.checkCredentials = async (req, res, next) => {
   if (!oauthClient.isAccessTokenValid(req.session.user.accesToken)) {
     // if token is invalid try to refresh it if success procide
     try {
-      oauthClient.refresh(req.session.user.refreshToken);
+      await oauthClient.refreshUsingToken(req.session.user.refreshToken);
+      console.log(oauthClient);
+      req.session.user = {
+        accesToken: oauthClient.token.access_token,
+        refreshToken: oauthClient.token.refresh_token,
+      };
+      next();
     } catch (error) {
-      res.status(403).json({ error: 'Acces Denied' }); // if no user acces denied function returns you need to log in again.
+      console.log('second block');
+      res.status(403).json({ error }); // if no user acces denied function returns you need to log in again.
     }
   } else {
     // the token is valid you can make an API call
+    console.log('3 block');
     next();
   }
 
@@ -55,7 +66,27 @@ exports.checkCredentials = async (req, res, next) => {
 };
 
 exports.getUsers = async (req, res) => {
-  // if i here means that token is valid
-
-  res.json('');
+  const query = querystring.escape('select * from Customer');
+  const companyID = '4620816365161933290';
+  try {
+    console.log('try to call');
+    const response = await oauthClient.makeApiCall({
+      url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/query?query=${query}&minorversion=57`,
+    });
+    const cx = response.json.QueryResponse.Customer;
+    const storesArray = cx.map((cxe) => ({
+      name: cxe.DisplayName,
+      email: cxe.PrimaryEmailAddr?.Address,
+      phone: cxe.PrimaryPhone?.FreeFormNumber,
+    }));
+    const users = await Customer.insertMany(storesArray);
+    res.status(200).json({ msg: 'success' });
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+exports.search = async (req, res) => {
+  console.log(req.body);
+  const timer = setTimeout(() => res.json(req.body), 5000);
 };
