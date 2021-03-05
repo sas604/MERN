@@ -11,4 +11,9 @@ router.get(
   appControler.getUsers
 );
 router.post('/api/search', appControler.search);
+router.post(
+  '/api/createcustomer',
+  // appControler.checkCredentials,
+  appControler.createCustomer
+);
 module.exports = router;

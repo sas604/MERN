@@ -86,7 +86,23 @@ exports.getUsers = async (req, res) => {
     res.json(error);
   }
 };
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
 exports.search = async (req, res) => {
-  console.log(req.body);
-  const timer = setTimeout(() => res.json(req.body), 5000);
+  const regex = new RegExp(escapeRegex(req.body.query), 'gi');
+  try {
+    const Customers = await Customer.find({ name: { $regex: regex } }).limit(
+      10
+    );
+    res.json(Customers);
+  } catch (e) {
+    res.status(505).json(e);
+  }
+};
+
+exports.createCustomer = async (req, res) => {
+  console.log(req.session);
+  res.json('wuba-wuba');
 };
