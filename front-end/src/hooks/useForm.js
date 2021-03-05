@@ -14,5 +14,7 @@ export default function useForm(defaults) {
       [e.target.name]: value,
     });
   }
-  return { values, updateValue };
+
+  const reset = () => setValues(defaults);
+  return { values, updateValue, reset };
 }
