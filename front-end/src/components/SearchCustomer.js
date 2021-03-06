@@ -7,7 +7,6 @@ const SearchCustomer = ({ setName }) => {
     search: '',
   });
   useEffect(() => {
-    if (!values.search) return;
     const controller = new AbortController();
     const { signal } = controller;
     const result = async (signal) => {
@@ -53,7 +52,7 @@ const SearchCustomer = ({ setName }) => {
         <datalist id="names" onChange={(e) => console.log(e)}>
           {searchResult &&
             searchResult.map((cx, i) => (
-              <option key={`${cx.name}--${i}`} value={cx.name} />
+              <option key={`${cx.DisplayName}--${i}`} value={cx.DisplayName} />
             ))}
         </datalist>
         <input type="submit" />

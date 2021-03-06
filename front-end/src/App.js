@@ -30,6 +30,17 @@ function App() {
         >
           log to quickbooks
         </button>
+        <button
+          onClick={() =>
+            fetch('http://localhost:5000/api/getusers', {
+              credentials: 'include',
+            })
+              .then((response) => response.json())
+              .then((res) => console.log(res))
+          }
+        >
+          users
+        </button>
       </header>
     </div>
   );

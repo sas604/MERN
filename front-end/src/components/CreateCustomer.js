@@ -14,21 +14,30 @@ const CreateCustomer = ({ close }) => {
     credentials: 'include',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ cx: { values } }),
+    body: JSON.stringify({
+      cx: {
+        DisplayName: values.name,
+        PrimaryEmailAddr: {
+          Address: values.email,
+        },
+        PrimaryPhone: {
+          FreeFormNumber: values.phone,
+        },
+      },
+    }),
   };
 
   const createCx = async (e) => {
     e.preventDefault();
     setStatus({ status: 'loading', msg: 'loading' });
-    try {
-      const res = await fetch(url, options);
-      const msg = await res.json();
-      reset();
-      setStatus({ status: 'ok', msg });
-    } catch (e) {
-      console.error(e);
-      setStatus({ status: 'error', msg: e.name });
-    }
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((res) => {
+        reset();
+        setStatus({ status: 'ok' });
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <>
