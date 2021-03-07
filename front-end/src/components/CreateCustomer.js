@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useForm from '../hooks/useForm';
-
+// TODO make all nessesary fields
 const CreateCustomer = ({ close }) => {
   const { values, updateValue, reset } = useForm({
     name: '',
@@ -8,8 +8,8 @@ const CreateCustomer = ({ close }) => {
     phone: '',
   });
   const [status, setStatus] = useState('idle');
-  console.log(status);
   const url = 'http://localhost:5000/api/createcustomer';
+  // options for the fetch
   const options = {
     credentials: 'include',
     method: 'POST',
@@ -26,22 +26,28 @@ const CreateCustomer = ({ close }) => {
       },
     }),
   };
-
+  // handle form submit
   const createCx = async (e) => {
     e.preventDefault();
     setStatus({ status: 'loading', msg: 'loading' });
+    try {
+      const res = await fetch(url, options);
+      const msg = await res.json();
+      if (!res.ok) {
+        throw new Error(
+          'Something went wrong while creating new customer. Make sure that cx name is unique'
+        );
+      }
 
-    fetch(url, options)
-      .then((res) => res.json())
-      .then((res) => {
-        reset();
-        setStatus({ status: 'ok' });
-      })
-      .catch((err) => console.log(err));
+      reset();
+      setStatus({ status: 'success', msg });
+    } catch (e) {
+      setStatus({ status: 'error', msg: e.message });
+    }
   };
   return (
     <>
-      {status !== 'idle' && <h2>{status.msg}</h2>}
+      {status !== 'idle' && <h6>{status.msg}</h6>}
       <form onSubmit={createCx}>
         <h2>Create A new customer</h2>
         <label htmlFor="name">

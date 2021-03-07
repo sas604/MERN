@@ -102,8 +102,8 @@ exports.search = async (req, res) => {
 };
 
 exports.createCustomer = async (req, res) => {
-  console.log(req.body.cx);
   try {
+    // make POST to intuit to save CX
     const response = await oauthClient.makeApiCall({
       url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/customer?minorversion=57`,
       method: 'POST',
@@ -112,11 +112,13 @@ exports.createCustomer = async (req, res) => {
       },
       body: JSON.stringify(req.body.cx),
     });
+    const cx = JSON.parse(response.body);
+    console.log(cx.Customer);
     // TODO check what info they store on customers
-    const newCX = await new Customer(response).save();
+    const newCX = await new Customer(cx.Customer).save(); // store new CX in the DB
+    res.status(200).json('Succesfuly created customer ');
   } catch (e) {
-    console.error(e);
-    res.status(505).send(e);
+    console.log(e);
+    res.status(400).send(e);
   }
-  res.json('wuba');
 };
