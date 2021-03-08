@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const customerSchema = mongoose.Schema(
   {
     FullyQualifiedName: String,
+    FamilyName: String,
+    GivenName: String,
     PrimaryEmailAddr: {
       Address: String,
     },
@@ -33,5 +35,6 @@ const customerSchema = mongoose.Schema(
 );
 customerSchema.index({
   DisplayName: 'text',
+  CompanyName: 'text',
 });
 module.exports = mongoose.model('Customer', customerSchema);
