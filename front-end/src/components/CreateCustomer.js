@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useForm from '../hooks/useForm';
 // TODO make all nessesary fields
 const CreateCustomer = ({ close }) => {
-  const { values, updateValue, reset } = useForm({
+  const [values, updateValue, reset] = useForm({
     name: '',
     email: '',
     phone: '',

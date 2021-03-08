@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import set from 'lodash/set';
 
 export default function useForm(defaults) {
   const [values, setValues] = useState(defaults);
@@ -9,12 +10,12 @@ export default function useForm(defaults) {
     if (e.target.type === 'number') {
       value = +value;
     }
+
     setValues({
-      ...values,
-      [e.target.name]: value,
+      ...set(values, e.target.name, value),
     });
   }
 
   const reset = () => setValues(defaults);
-  return { values, updateValue, reset };
+  return [values, updateValue, reset];
 }

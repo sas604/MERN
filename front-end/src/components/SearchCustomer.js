@@ -3,7 +3,7 @@ import useForm from '../hooks/useForm';
 
 const SearchCustomer = ({ setName }) => {
   const [searchResult, setSearchResults] = useState([]);
-  const { values, updateValue } = useForm({
+  const [values, updateValue] = useForm({
     search: '',
   });
   useEffect(() => {
