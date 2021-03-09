@@ -149,7 +149,6 @@ exports.updateCx = async (req, res) => {
       body: JSON.stringify(data),
     });
     const cx = JSON.parse(response.body);
-    console.log(cx.Customer.DisplayName);
     const newCx = await Customer.findOneAndUpdate(
       { DisplayName: cx.Customer.DisplayName },
       { $set: cx.Customer },
