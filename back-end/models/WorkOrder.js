@@ -11,11 +11,20 @@ const workOrderSchema = mongoose.Schema(
     year: Number,
     make: String,
     model: String,
-    services: [{ name: String, parts: String }],
+    services: [
+      {
+        name: String,
+        parts: String,
+        done: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     totalParts: Number,
     dateRecived: Date,
-    colorTag: String,
-    recivedBy: String,
+    color: String,
+    recived: String,
     shiping: String,
     photos: [String],
   },

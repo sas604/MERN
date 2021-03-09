@@ -18,6 +18,11 @@ router.post(
   appControler.updateCx
 );
 router.post(
+  '/api/createWorkOrder',
+  appControler.checkCredentials,
+  appControler.createWorkOrder
+);
+router.post(
   '/api/createcustomer',
   appControler.checkCredentials,
   appControler.createCustomer

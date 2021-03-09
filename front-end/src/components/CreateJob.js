@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import useForm from '../hooks/useForm';
 import AddService from './AddService';
 import CustomerInfo from './CustomerInfo';
@@ -7,6 +7,7 @@ import set from 'lodash/set';
 import { useHistory } from 'react-router-dom';
 
 const initialState = {
+  customer: '',
   year: '',
   make: '',
   model: '',
@@ -16,9 +17,9 @@ const initialState = {
   recived: '',
   shiping: '',
   services: [
-    { name: 'MP', parts: 'shaft' },
-    { name: 'TR', parts: 'All' },
-    { name: 'VB', parts: 'Gears, shaft' },
+    { name: 'MP', parts: 'shaft', done: false },
+    { name: 'TR', parts: 'All', done: false },
+    { name: 'VB', parts: 'Gears, shaft', done: false },
   ],
   invoice: '',
 };
@@ -27,6 +28,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'updateValue':
       return { ...set(state, action.field, action.value) };
+    case 'setCx':
+      return { ...state, customer: action.cx };
     case 'addService':
       action.close();
       return { ...state, services: [...state.services, { ...action.form }] };
@@ -49,22 +52,24 @@ const CreateJob = ({ customer }) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => dispatch({ type: 'setCx', cx: customer._id }), []);
   const [error, setError] = useState(false);
-  const url = `http://localhost:5000/api/addWork`;
+  const url = `http://localhost:5000/api/createWorkOrder`;
   const options = {
     credentials: 'include',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ state, customer }),
+    body: JSON.stringify(state),
   };
   const createOrder = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch(url, options);
       if (!res.ok) {
+        console.log(e);
         setError(e);
       } else {
-        history.goBack();
+        console.log(res);
       }
     } catch (e) {
       setError(e);
@@ -170,6 +175,7 @@ const CreateJob = ({ customer }) => {
         <label>
           Drop off
           <input
+            checked
             type="radio"
             name="recived"
             value="dropoff"
@@ -189,6 +195,7 @@ const CreateJob = ({ customer }) => {
         <label>
           Pick-UP
           <input
+            checked
             type="radio"
             name="shiping"
             value="pick-up"

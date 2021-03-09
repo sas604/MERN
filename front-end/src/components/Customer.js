@@ -6,6 +6,7 @@ import set from 'lodash/set';
 import initialState from '../utils/customerReducer';
 import { Link } from 'react-router-dom';
 import CreateJob from './CreateJob';
+import WorkOrderList from './WorkOrdersList';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -51,10 +52,10 @@ const Customer = () => {
   // set data to reducer when it loads
   useEffect(() => {
     if (!data) return;
-    dispatch({ type: 'load', data });
+    dispatch({ type: 'load', data: data.cx });
   }, [data]);
 
-  if (pendingFetch) return <h1>Loading...</h1>;
+  if (pendingFetch || !data) return <h1>Loading...</h1>;
   if (error) return <h1>Oh snap errror</h1>;
 
   return (
@@ -66,8 +67,8 @@ const Customer = () => {
             values={state} // should be cx object
             updateValue={updateField}
           />
+          <WorkOrderList orders={data.workOrders} />
           <Link to={`${url}/edit`}>Edit</Link>
-          <Link to={`${url}/Add`}>Add</Link>
         </Route>
         <Route path={`${path}/edit`}>
           <CustomerInfo values={state} updateValue={updateField} />

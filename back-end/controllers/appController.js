@@ -4,6 +4,7 @@ require('dotenv').config();
 const querystring = require('querystring');
 const mongoose = require('mongoose');
 const Customer = require('../models/Customer');
+const WorkOrder = require('../models/WorkOrder');
 
 // TODO make dynamic
 const companyID = '4620816365161933290';
@@ -126,9 +127,15 @@ exports.createCustomer = async (req, res) => {
 // get single customer from DB
 exports.getCx = async (req, res) => {
   try {
+    // get cx
     const cx = await Customer.findOne({ DisplayName: req.params.name });
 
-    res.json(cx);
+    // get jobs for client doing this way so I dont have to deal with one big object
+    const workOrders = await WorkOrder.find({ customer: cx._id }).populate(
+      'customer'
+    );
+
+    res.json({ cx, workOrders });
   } catch (e) {
     res.status(400).json(e);
   }
@@ -138,7 +145,6 @@ exports.updateCx = async (req, res) => {
   delete data._id;
   delete data.__v;
   data.sparse = true;
-  console.log(data);
   try {
     const response = await oauthClient.makeApiCall({
       url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/customer?minorversion=57`,
@@ -159,4 +165,13 @@ exports.updateCx = async (req, res) => {
   } catch (e) {
     res.status(400).json(e);
   }
+};
+exports.createWorkOrder = async (req, res) => {
+  console.log(req.body);
+  try {
+    const order = await new WorkOrder(req.body).save();
+  } catch (e) {
+    res.json(e);
+  }
+  res.json('trun');
 };
