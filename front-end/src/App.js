@@ -1,6 +1,12 @@
 import './App.css';
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+} from 'react-router-dom';
 import { useState } from 'react';
 import SearchCustomer from './components/SearchCustomer';
 import CreateCustomer from './components/CreateCustomer';
@@ -9,6 +15,7 @@ import Customer from './components/Customer';
 
 function App() {
   const [name, setName] = useState('');
+
   return (
     <Router>
       <div className="App">

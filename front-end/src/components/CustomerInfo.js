@@ -1,5 +1,9 @@
 // accept customer object
-const CustomerInfo = ({ readOnly, values, updateValue }) => {
+const CustomerInfo = ({
+  readOnly = false,
+  values,
+  updateValue = (f) => (e) => e.target,
+}) => {
   return (
     <fieldset className="values-info" disabled={readOnly}>
       <h2>Personal Info</h2>

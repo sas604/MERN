@@ -1,42 +1,12 @@
 import { useEffect, useReducer, useState } from 'react';
-import { useParams } from 'react-router';
+import { Route, Router, Switch, useParams, useRouteMatch } from 'react-router';
 import useFetch from '../hooks/useFetch';
 import CustomerInfo from './CustomerInfo';
 import set from 'lodash/set';
+import initialState from '../utils/customerReducer';
+import { Link } from 'react-router-dom';
+import CreateJob from './CreateJob';
 
-const initialState = {
-  FullyQualifiedName: '',
-  FamilyName: '',
-  GivenName: '',
-  PrimaryEmailAddr: {
-    Address: '',
-  },
-  DisplayName: '',
-  Suffix: '',
-  Title: '',
-  MiddleName: '',
-  PrimaryPhone: {
-    FreeFormNumber: '',
-  },
-  CompanyName: '',
-  BillAddr: {
-    CountrySubDivisionCode: '',
-    City: '',
-    PostalCode: '',
-    Line1: '',
-    Line2: '',
-    Country: '',
-  },
-  ShipAddr: {
-    CountrySubDivisionCode: '',
-    City: '',
-    PostalCode: '',
-    Line1: '',
-    Line2: '',
-    Country: '',
-  },
-  Id: '',
-};
 const reducer = (state, action) => {
   switch (action.type) {
     case 'updateValue':
@@ -49,16 +19,20 @@ const reducer = (state, action) => {
       return initialState;
   }
 };
+
+// customer component
 const Customer = () => {
+  const { path, url } = useRouteMatch();
   const [edit, setEdit] = useState(false);
+  const [addNew, setAddNew] = useState(false);
   const { name } = useParams();
   const options = {
     credentials: 'include',
   };
 
   // get user from the server
-  const url = `http://localhost:5000/api/get/${name}`;
-  const [pendingFetch, error, data] = useFetch(url, options, edit);
+  const urlGet = `http://localhost:5000/api/get/${name}`;
+  const [pendingFetch, error, data] = useFetch(urlGet, options, edit);
 
   // post  data to server
   const postUri = 'http://localhost:5000/api/updatesinglecx';
@@ -80,21 +54,23 @@ const Customer = () => {
     dispatch({ type: 'load', data });
   }, [data]);
 
-  if (pendingFetch || !data) return <h1>Loading...</h1>;
+  if (pendingFetch) return <h1>Loading...</h1>;
   if (error) return <h1>Oh snap errror</h1>;
 
   return (
     <>
-      <button type="button" onClick={() => setEdit(true)}>
-        Edit
-      </button>
-      <CustomerInfo
-        readOnly={!edit}
-        values={state} // should be cx object
-        updateValue={updateField}
-      />
-      {edit && (
-        <>
+      <Switch>
+        <Route exact path={path}>
+          <CustomerInfo
+            readOnly
+            values={state} // should be cx object
+            updateValue={updateField}
+          />
+          <Link to={`${url}/edit`}>Edit</Link>
+          <Link to={`${url}/Add`}>Add</Link>
+        </Route>
+        <Route path={`${path}/edit`}>
+          <CustomerInfo values={state} updateValue={updateField} />
           <button
             type="button"
             onClick={() =>
@@ -108,13 +84,35 @@ const Customer = () => {
           >
             Update
           </button>
-          <button type="button" onClick={() => setEdit(false)}>
-            Cancel
-          </button>
-        </>
-      )}
+        </Route>
+        <Route path={`${path}/add`}>
+          <CreateJob customer={state} />
+        </Route>
+      </Switch>
     </>
   );
+
+  // return (
+  //   <LI>
+  //     <button type="button" onClick={() => setEdit(true)}>
+  //       Edit
+  //     </button>
+  //     <CustomerInfo */}
+  //       readOnly={!edit}
+  //       values={state} // should be cx object
+  //       updateValue={updateField}
+  //     />
+  //     {edit && (
+  //       <>
+  //
+  //         <button type="button" onClick={() => setEdit(false)}>
+  //           Cancel
+  //         </button>
+  //         <button type="button">Create new job</button>
+  //       </>
+  //     )}
+  //   </LI>
+  // );
 };
 
 export default Customer;

@@ -3,9 +3,18 @@ import useForm from '../hooks/useForm';
 import AddService from './AddService';
 import CustomerInfo from './CustomerInfo';
 import Service from './Service';
+import set from 'lodash/set';
+import { useHistory } from 'react-router-dom';
 
 const initialState = {
-  workOrder: {},
+  year: '',
+  make: '',
+  model: '',
+  totalParts: '',
+  color: '#000000',
+  date: '',
+  recived: '',
+  shiping: '',
   services: [
     { name: 'MP', parts: 'shaft' },
     { name: 'TR', parts: 'All' },
@@ -16,6 +25,8 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'updateValue':
+      return { ...set(state, action.field, action.value) };
     case 'addService':
       action.close();
       return { ...state, services: [...state.services, { ...action.form }] };
@@ -26,29 +37,43 @@ const reducer = (state, action) => {
           (el) => el !== state.services[action.index]
         ),
       };
+
     default:
       return;
   }
 };
 const CreateJob = ({ customer }) => {
+  const { history } = useHistory();
   const [servicesModal, setServicesModal] = useState(false);
-  const workOreder = {
-    year: '',
-    make: '',
-    model: '',
-    totalParts: '',
-    color: '#000000',
-    date: '',
-    recived: '',
-    shiping: '',
+  const updateField = (field) => (e) => {
+    dispatch({ type: 'updateValue', field, value: e.target.value });
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [values, updateValue] = useForm(workOreder);
-  //collect inforamation about the job
-  // send it to the server
+  const [error, setError] = useState(false);
+  const url = `http://localhost:5000/api/addWork`;
+  const options = {
+    credentials: 'include',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ state, customer }),
+  };
+  const createOrder = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) {
+        setError(e);
+      } else {
+        history.goBack();
+      }
+    } catch (e) {
+      setError(e);
+    }
+  };
+
   return (
-    <form>
-      <CustomerInfo />
+    <form onSubmit={createOrder}>
+      <CustomerInfo readOnly values={customer} />
       <div className="work-order">
         <h2>Work Oder Info</h2>
         <fieldset>
@@ -57,9 +82,9 @@ const CreateJob = ({ customer }) => {
             <input
               type="number"
               name="year"
-              value={values.year}
+              value={state.year}
               max="2200"
-              onChange={updateValue}
+              onChange={updateField('year')}
             />
           </label>
           <label htmlFor="make">
@@ -67,8 +92,8 @@ const CreateJob = ({ customer }) => {
             <input
               type="text"
               name="make"
-              value={values.make}
-              onChange={updateValue}
+              value={state.make}
+              onChange={updateField('make')}
             />
           </label>
           <label htmlFor="model">
@@ -76,8 +101,8 @@ const CreateJob = ({ customer }) => {
             <input
               type="text"
               name="model"
-              value={values.model}
-              onChange={updateValue}
+              value={state.model}
+              onChange={updateField('model')}
             />
           </label>
         </fieldset>
@@ -110,8 +135,8 @@ const CreateJob = ({ customer }) => {
           <input
             type="number"
             name="totalParts"
-            value={values.totalParts}
-            onChange={updateValue}
+            value={state.totalParts}
+            onChange={updateField('totalParts')}
           />
         </label>
         <label>
@@ -119,8 +144,8 @@ const CreateJob = ({ customer }) => {
           <input
             type="date"
             name="date"
-            value={values.date}
-            onChange={updateValue}
+            value={state.date}
+            onChange={updateField('date')}
           />
         </label>
         <label>
@@ -128,8 +153,8 @@ const CreateJob = ({ customer }) => {
           <input
             type="color"
             name="color"
-            value={values.color}
-            onChange={updateValue}
+            value={state.color}
+            onChange={updateField('color')}
           />
         </label>
         <p>Recived By</p>
@@ -139,7 +164,7 @@ const CreateJob = ({ customer }) => {
             type="radio"
             name="recived"
             value="shiped"
-            onChange={updateValue}
+            onChange={updateField('recived')}
           />
         </label>
         <label>
@@ -148,7 +173,7 @@ const CreateJob = ({ customer }) => {
             type="radio"
             name="recived"
             value="dropoff"
-            onChange={updateValue}
+            onChange={updateField('recived')}
           />
         </label>
         <p>Shiping</p>
@@ -158,7 +183,7 @@ const CreateJob = ({ customer }) => {
             type="radio"
             name="shiping"
             value="ship"
-            onChange={updateValue}
+            onChange={updateField('shiping')}
           />
         </label>
         <label>
@@ -167,7 +192,7 @@ const CreateJob = ({ customer }) => {
             type="radio"
             name="shiping"
             value="pick-up"
-            onChange={updateValue}
+            onChange={updateField('shiping')}
           />
         </label>
         <label>
@@ -176,7 +201,7 @@ const CreateJob = ({ customer }) => {
             type="radio"
             name="shiping"
             value="deliver"
-            onChange={updateValue}
+            onChange={updateField('shiping')}
           />
         </label>
       </fieldset>
