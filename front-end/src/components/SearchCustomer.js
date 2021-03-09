@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import useForm from '../hooks/useForm';
+import { useHistory } from 'react-router-dom';
 
-const SearchCustomer = ({ setName }) => {
+const SearchCustomer = () => {
   const [searchResult, setSearchResults] = useState([]);
   const [values, updateValue] = useForm({
     search: '',
   });
+  const history = useHistory();
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -34,8 +36,9 @@ const SearchCustomer = ({ setName }) => {
   return (
     <form
       onSubmit={(e) => {
+        //TODO prevent to redirect if no customer selected
         e.preventDefault();
-        setName(values.search);
+        history.push(`/customer/${values.search}`);
       }}
     >
       <fieldset>

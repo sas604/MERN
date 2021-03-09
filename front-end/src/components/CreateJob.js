@@ -5,10 +5,7 @@ import CustomerInfo from './CustomerInfo';
 import Service from './Service';
 
 const initialState = {
-  customer: {},
-  make: '',
-  model: '',
-  year: '',
+  workOrder: {},
   services: [
     { name: 'MP', parts: 'shaft' },
     { name: 'TR', parts: 'All' },
@@ -33,7 +30,7 @@ const reducer = (state, action) => {
       return;
   }
 };
-const CreateJob = () => {
+const CreateJob = ({ customer }) => {
   const [servicesModal, setServicesModal] = useState(false);
   const workOreder = {
     year: '',
@@ -107,7 +104,7 @@ const CreateJob = () => {
         </fieldset>
       </div>
 
-      <fieldset className="officeuse">
+      <fieldset className="office-use">
         <label>
           Total Parts
           <input

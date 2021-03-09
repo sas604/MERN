@@ -1,99 +1,45 @@
-import useForm from '../hooks/useForm';
-
 // accept customer object
-const CustomerInfo = ({
-  defaults = {
-    domain: 'QBO',
-
-    FamilyName: 'Lauterbach',
-    DisplayName: "Amy's Bird Sanctuary",
-    DefaultTaxCodeRef: {
-      value: '2',
-    },
-    PrimaryEmailAddr: {
-      Address: 'Birds@Intuit.com',
-    },
-    PreferredDeliveryMethod: 'Print',
-    GivenName: 'Amy',
-    FullyQualifiedName: "Amy's Bird Sanctuary",
-    BillWithParent: false,
-    Job: false,
-    BalanceWithJobs: 274.0,
-    PrimaryPhone: {
-      FreeFormNumber: '(650) 555-3311',
-    },
-    Active: true,
-    MetaData: {
-      CreateTime: '2014-09-11T16:48:43-07:00',
-      LastUpdatedTime: '2015-07-01T10:14:15-07:00',
-    },
-    BillAddr: {
-      City: 'Bayshore',
-      Line1: '4581 Finch St.',
-      PostalCode: '94326',
-      Lat: 'INVALID',
-      Long: 'INVALID',
-      CountrySubDivisionCode: 'CA',
-      Id: '2',
-    },
-    MiddleName: 'Michelle',
-    Notes: 'Note added via Update operation.',
-    Taxable: true,
-    Balance: 274.0,
-    SyncToken: '5',
-    CompanyName: "Amy's Bird Sanctuary",
-    ShipAddr: {
-      City: 'Bayshore',
-      Line1: '4581 Finch St.',
-      PostalCode: '94326',
-      Lat: 'INVALID',
-      Long: 'INVALID',
-      CountrySubDivisionCode: 'CA',
-      Id: '109',
-    },
-    PrintOnCheckName: "Amy's Bird Sanctuary",
-    sparse: false,
-    Id: '1',
-  },
-}) => {
-  const [values, updateValue] = useForm(defaults);
-
+const CustomerInfo = ({ readOnly, values, updateValue }) => {
   return (
-    <fieldset className="values-info" disabled>
+    <fieldset className="values-info" disabled={readOnly}>
       <h2>Personal Info</h2>
       <label htmlFor="displayedName">
         <input
           type="text"
-          name="displayedName"
-          value={values.DisplayName}
-          onChange={updateValue}
+          name="DisplayName"
+          value={values.DisplayName || ''}
+          onChange={updateValue('DisplayName')}
+          readOnly
         ></input>
       </label>
       <label htmlFor="company">
         <span>Business Name</span>
         <input
           type="text"
-          name="company"
-          value={values.CompanyName || 'not set'}
-          onChange={updateValue}
+          name="CompanyName"
+          value={values.CompanyName}
+          onChange={updateValue('CompanyName')}
+          readOnly={readOnly}
         />
       </label>
       <label htmlFor="first-name">
         <span>Contact First Name</span>
         <input
           type="text"
-          name="first-name"
-          value={values.GivenName || 'not set'}
-          onChange={updateValue}
+          name="GivenName"
+          value={values.GivenName}
+          onChange={updateValue('GivenName')}
+          readOnly={readOnly}
         />
       </label>
       <label htmlFor="last-name">
         <span>Contact Last Name</span>
         <input
           type="text"
-          name="last-name"
-          value={values.FamilyName || 'not set'}
-          onChange={updateValue}
+          name="FamilyName"
+          value={values.FamilyName}
+          onChange={updateValue('FamilyName')}
+          readOnly={readOnly}
         />
       </label>
       <label htmlFor="email">
@@ -101,8 +47,9 @@ const CustomerInfo = ({
         <input
           type="email"
           name="PrimaryEmailAddr.Address"
-          value={values.PrimaryEmailAddr.Address || 'not set'}
-          onChange={updateValue}
+          value={values.PrimaryEmailAddr.Address || ''}
+          onChange={updateValue('PrimaryEmailAddr.Address')}
+          readOnly={readOnly}
         />
       </label>
       <label htmlFor="phone">
@@ -110,8 +57,9 @@ const CustomerInfo = ({
         <input
           type="tel"
           name="PrimaryPhone.FreeFormNumber"
-          value={values.PrimaryPhone.FreeFormNumber || 'not set'}
-          onChange={updateValue}
+          value={values.PrimaryPhone?.FreeFormNumber || ''}
+          onChange={updateValue('PrimaryPhone.FreeFormNumber')}
+          readOnly={readOnly}
         />
       </label>
 
@@ -122,7 +70,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="ShipAddr.Line1"
-            value={values.ShipAddr.Line1}
+            value={values.ShipAddr?.Line1 || ''}
+            onChange={updateValue('ShipAddr.Line1')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="ShipAddr.Line2">
@@ -130,7 +80,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="ShipAddr.Line2"
-            value={values.ShipAddr.Line2}
+            value={values.ShipAddr?.Line2 || ''}
+            onChange={updateValue('ShipAddr.Line2')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="ShipAddr.City">
@@ -138,7 +90,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="ShipAddr.City"
-            value={values.ShipAddr.City}
+            value={values.ShipAddr?.City || ''}
+            onChange={updateValue('ShipAddr.City')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="ShipAddr.CountrySubDivisionCode">
@@ -146,7 +100,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="ShipAddr.CountrySubDivisionCode"
-            value={values.ShipAddr.CountrySubDivisionCode}
+            value={values.ShipAddr?.CountrySubDivisionCode || ''}
+            onChange={updateValue('ShipAddr.CountrySubDivisionCode')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="ShipAddr.PostalCode">
@@ -154,7 +110,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="ShipAddr.PostalCode"
-            value={values.ShipAddr.PostalCode}
+            value={values.ShipAddr?.PostalCode || ''}
+            onChange={updateValue('ShipAddr.PostalCode')}
+            readOnly={readOnly}
           />
         </label>
       </fieldset>
@@ -165,7 +123,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="BillAddr.Line1"
-            value={values.BillAddr.Line1}
+            value={values.BillAddr?.Line1 || ''}
+            onChange={updateValue('BillAddr.Line1')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="BillAddr.Line2">
@@ -173,7 +133,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="BillAddr.Line2"
-            value={values.BillAddr.Line2}
+            value={values.BillAddr?.Line2 || ''}
+            onChange={updateValue('BillAddr.Line2')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="BillAddr.City">
@@ -181,7 +143,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="BillAddr.City"
-            value={values.BillAddr.City}
+            value={values.BillAddr?.City || ''}
+            onChange={updateValue('BillAddr.City')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="BillAddr.CountrySubDivisionCode">
@@ -189,7 +153,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="BillAddr.CountrySubDivisionCode"
-            value={values.BillAddr.CountrySubDivisionCode}
+            value={values.BillAddr?.CountrySubDivisionCode || ''}
+            onChange={updateValue('BillAddr.CountrySubDivisionCode')}
+            readOnly={readOnly}
           />
         </label>
         <label htmlFor="BillAddr.PostalCode">
@@ -197,7 +163,9 @@ const CustomerInfo = ({
           <input
             type="text"
             name="BillAddr.PostalCode"
-            value={values.BillAddr.PostalCode}
+            value={values.BillAddr?.PostalCode || ''}
+            onChange={updateValue('BillAddr.PostalCode')}
+            readOnly={readOnly}
           />
         </label>
       </fieldset>

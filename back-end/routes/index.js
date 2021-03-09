@@ -11,6 +11,12 @@ router.get(
   appControler.getUsers
 );
 router.post('/api/search', appControler.search);
+router.get('/api/get/:name', appControler.checkCredentials, appControler.getCx);
+router.post(
+  '/api/updatesinglecx',
+  appControler.checkCredentials,
+  appControler.updateCx
+);
 router.post(
   '/api/createcustomer',
   appControler.checkCredentials,

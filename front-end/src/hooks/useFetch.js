@@ -1,16 +1,12 @@
 const { useState, useEffect } = require('react');
 
-// const useFetch = async (url, ) => {
-//   const [data, setData] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(false);
-
-export const useFetch = (url, options) => {
+export const useFetch = (url, options, refetch) => {
   const [pendingFetch, setPending] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    if (!options) return;
     let cancel = false;
 
     if (!url) {
@@ -21,7 +17,7 @@ export const useFetch = (url, options) => {
     const fetchData = async () => {
       setPending(true);
       try {
-        const response = await fetch(url, options);
+        const response = await fetch(url, options, refetch);
         const data = await response.json();
         if (!cancel) {
           setData(data);
@@ -38,8 +34,8 @@ export const useFetch = (url, options) => {
     fetchData();
 
     return () => (cancel = true);
-  }, [url]);
+  }, [url, refetch]);
 
-  return { pendingFetch, error, data };
+  return [pendingFetch, error, data];
 };
 export default useFetch;

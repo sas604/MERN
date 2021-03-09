@@ -113,12 +113,51 @@ exports.createCustomer = async (req, res) => {
       body: JSON.stringify(req.body.cx),
     });
     const cx = JSON.parse(response.body);
-    console.log(cx.Customer);
     // TODO check what info they store on customers
     const newCX = await new Customer(cx.Customer).save(); // store new CX in the DB
+    // send customer Dispaly name and redirect to Customer page
     res.status(200).json('Succesfuly created customer ');
   } catch (e) {
     console.log(e);
-    res.status(400).send(e);
+    res.status(400).jason(e);
+  }
+};
+
+// get single customer from DB
+exports.getCx = async (req, res) => {
+  try {
+    const cx = await Customer.findOne({ DisplayName: req.params.name });
+
+    res.json(cx);
+  } catch (e) {
+    res.status(400).json(e);
+  }
+};
+exports.updateCx = async (req, res) => {
+  const data = req.body;
+  delete data._id;
+  delete data.__v;
+  data.sparse = true;
+  console.log(data);
+  try {
+    const response = await oauthClient.makeApiCall({
+      url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/customer?minorversion=57`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const cx = JSON.parse(response.body);
+    console.log(cx.Customer.DisplayName);
+    const newCx = await Customer.findOneAndUpdate(
+      { DisplayName: cx.Customer.DisplayName },
+      { $set: cx.Customer },
+      { new: true }
+    );
+
+    res.json(newCx);
+  } catch (e) {
+    res.status(400).json(e);
   }
 };
