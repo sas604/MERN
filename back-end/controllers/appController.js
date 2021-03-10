@@ -167,11 +167,33 @@ exports.updateCx = async (req, res) => {
   }
 };
 exports.createWorkOrder = async (req, res) => {
-  console.log(req.body);
+  // TODO make this functional
   try {
     const order = await new WorkOrder(req.body).save();
   } catch (e) {
+    res.staus(400).json(e);
+  }
+};
+exports.getWorkOrders = async (req, res) => {
+  // TODO make this functional
+  try {
+    // TODO check if i can send only name
+    const ordersFinishedPromise = WorkOrder.find({
+      status: 'inProgress',
+    }).populate('customer');
+
+    const readyToshipPromise = WorkOrder.find({
+      status: 'readyForShiping',
+    }).populate('customer');
+
+    const [inProgress, readyToShip] = await Promise.all([
+      ordersFinishedPromise,
+      readyToshipPromise,
+    ]);
+
+    res.json({ inProgress, readyToShip });
+  } catch (e) {
+    console.error(e);
     res.json(e);
   }
-  res.json('trun');
 };

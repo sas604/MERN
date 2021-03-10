@@ -27,4 +27,10 @@ router.post(
   appControler.checkCredentials,
   appControler.createCustomer
 );
+router.get(
+  '/api/getWorkOrders',
+  appControler.checkCredentials,
+  appControler.getWorkOrders
+);
+
 module.exports = router;

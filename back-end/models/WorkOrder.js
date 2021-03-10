@@ -15,6 +15,7 @@ const workOrderSchema = mongoose.Schema(
       {
         name: String,
         parts: String,
+        serviceTag: String,
         done: {
           type: Boolean,
           default: false,
@@ -27,6 +28,17 @@ const workOrderSchema = mongoose.Schema(
     recived: String,
     shiping: String,
     photos: [String],
+    status: {
+      type: String,
+      enum: ['inProgress', 'readyForShiping'],
+      default: 'inProgress',
+    },
+    needsParts: Boolean,
+    whaitingForParts: Boolean,
+    finished: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
