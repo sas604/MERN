@@ -1,15 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
 import SearchCustomer from './components/SearchCustomer';
 import CreateCustomer from './components/CreateCustomer';
 import CreateJob from './components/CreateJob';
 import Customer from './components/Customer';
+import WorkOrdersDashboard from './components/WorkOrdersDashboard';
+import './App.css';
 
 function App() {
   const [name, setName] = useState('');
@@ -29,9 +25,11 @@ function App() {
               <li>
                 <Link to="/users">Users</Link>
               </li>
+              <li>
+                <Link to="/dashboard/inProgress">Work orders</Link>
+              </li>
             </ul>
           </nav>
-          <h2>Create new job order</h2>
 
           {/* <button
             onClick={() =>
@@ -42,7 +40,7 @@ function App() {
           >
             log to quickbooks
           </button>*/}
-          <button
+          {/* <button
             onClick={() =>
               fetch('http://localhost:5000/api/getusers', {
                 credentials: 'include',
@@ -52,7 +50,7 @@ function App() {
             }
           >
             users
-          </button>
+          </button> */}
 
           <Switch>
             <Route exact path="/">
@@ -76,6 +74,11 @@ function App() {
           <Switch>
             <Route path="/customer/:name">
               <Customer />
+            </Route>
+          </Switch>
+          <Switch>
+            <Route path="/dashboard/:status">
+              <WorkOrdersDashboard />
             </Route>
           </Switch>
         </header>

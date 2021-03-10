@@ -29,6 +29,17 @@ const AddService = ({ index, dispatch, close }) => {
           />
         </label>
         <label>
+          Service Tag
+          <input
+            type="text"
+            name="serviceTag"
+            value={values.serviceTag}
+            placeholder="Tag "
+            onChange={updateValue}
+          />
+        </label>
+
+        <label>
           Parts
           <input
             type="text"

@@ -1,9 +1,13 @@
-const Service = ({ name, parts, dispatch, index }) => {
+const Service = ({ name, parts, dispatch, index, serviceTag }) => {
   return (
     <>
       <fieldset>
         <label>
-          Service
+          Tag
+          <input type="text" name="serviceTag" value={serviceTag} readOnly />
+        </label>
+        <label>
+          Service description
           <input
             type="text"
             name="service"
@@ -12,15 +16,10 @@ const Service = ({ name, parts, dispatch, index }) => {
             readOnly
           />
         </label>
+
         <label>
           Parts
-          <input
-            type="text"
-            name="parts"
-            value={parts}
-            placeholder="parts"
-            readOnly
-          />
+          <input type="text" name="parts" value={parts} readOnly />
         </label>
 
         <button

@@ -16,11 +16,7 @@ const initialState = {
   date: '',
   recived: '',
   shiping: '',
-  services: [
-    { name: 'MP', parts: 'shaft', done: false },
-    { name: 'TR', parts: 'All', done: false },
-    { name: 'VB', parts: 'Gears, shaft', done: false },
-  ],
+  services: [],
   invoice: '',
 };
 
@@ -125,6 +121,7 @@ const CreateJob = ({ customer }) => {
               dispatch={dispatch}
               name={service.name}
               parts={service.parts}
+              serviceTag={service.serviceTag}
               index={i}
             />
           ))}
@@ -175,7 +172,6 @@ const CreateJob = ({ customer }) => {
         <label>
           Drop off
           <input
-            checked
             type="radio"
             name="recived"
             value="dropoff"
@@ -195,7 +191,6 @@ const CreateJob = ({ customer }) => {
         <label>
           Pick-UP
           <input
-            checked
             type="radio"
             name="shiping"
             value="pick-up"
