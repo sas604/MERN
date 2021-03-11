@@ -1,4 +1,3 @@
-body > label {
-  display: flex;
-  flex-direction: column;
+label + label {
+  margin-top: 1rem;
 }

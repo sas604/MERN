@@ -3,10 +3,6 @@ const Service = ({ name, parts, dispatch, index, serviceTag }) => {
     <>
       <fieldset>
         <label>
-          Tag
-          <input type="text" name="serviceTag" value={serviceTag} readOnly />
-        </label>
-        <label>
           Service description
           <input
             type="text"
@@ -16,7 +12,10 @@ const Service = ({ name, parts, dispatch, index, serviceTag }) => {
             readOnly
           />
         </label>
-
+        <label>
+          Tag
+          <input type="text" name="serviceTag" value={serviceTag} readOnly />
+        </label>
         <label>
           Parts
           <input type="text" name="parts" value={parts} readOnly />

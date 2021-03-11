@@ -168,9 +168,12 @@ exports.updateCx = async (req, res) => {
 };
 exports.createWorkOrder = async (req, res) => {
   // TODO make this functional
+  console.log(req.body);
   try {
     const order = await new WorkOrder(req.body).save();
+    res.status(200).json('success');
   } catch (e) {
+    console.error(e);
     res.staus(400).json(e);
   }
 };
@@ -178,20 +181,39 @@ exports.getWorkOrders = async (req, res) => {
   // TODO make this functional
   try {
     // TODO check if i can send only name
-    const ordersFinishedPromise = WorkOrder.find({
-      status: 'inProgress',
-    }).populate('customer');
-
-    const readyToshipPromise = WorkOrder.find({
-      status: 'readyForShiping',
-    }).populate('customer');
-
-    const [inProgress, readyToShip] = await Promise.all([
-      ordersFinishedPromise,
-      readyToshipPromise,
+    const sortByStatus = await WorkOrder.aggregate([
+      {
+        $lookup: {
+          from: 'customers',
+          localField: 'customer',
+          foreignField: '_id',
+          as: 'customer',
+        },
+      },
+      {
+        $set: {
+          customer: { $arrayElemAt: ['$customer', 0] },
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $group: {
+          _id: '$status',
+          docs: { $addToSet: '$$ROOT' },
+        },
+      },
     ]);
 
-    res.json({ inProgress, readyToShip });
+    console.log(sortByStatus);
+    const data = sortByStatus.reduce(
+      (a, v) => ({ ...a, [v._id]: [...v.docs] }),
+      {}
+    );
+    res.json(data);
   } catch (e) {
     console.error(e);
     res.json(e);

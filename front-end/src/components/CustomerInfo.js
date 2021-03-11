@@ -68,7 +68,7 @@ const CustomerInfo = ({
       </label>
 
       <fieldset className="shiping">
-        <h2>Shiping Address</h2>
+        <h2>Shipping Address</h2>
         <label htmlFor="ShipAddr.Line1">
           Address Line 1
           <input

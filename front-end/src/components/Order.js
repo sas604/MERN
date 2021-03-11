@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { MdPhotoCamera, MdExpandMore, MdExpandLess } from 'react-icons/md';
-import { useState } from 'react';
-//import { Link } from 'react-router-dom';
+import { useReducer, useState } from 'react';
+import OrderInfo from './OrderInfo';
+import { reducer, initialState } from '../utils/jobReducer';
 const OrderStyles = styled.div`
   border: 1px solid black;
   margin: 1rem 0;
-  padding: 1rem;
   transition: all 0.5s;
+
   li {
     list-style: none;
   }
@@ -14,6 +15,10 @@ const OrderStyles = styled.div`
     margin-top: 1rem;
   }
   .work-order-min {
+    padding: 1rem;
+    position: relative;
+    z-index: 5;
+    background-color: white;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -75,13 +80,17 @@ const OrderStyles = styled.div`
     outline: none;
     border: none;
   }
-  .details-hide {
+
+  .hide {
     display: none;
   }
 `;
 
-const Order = ({ order }) => {
-  const updateField = (field) => (f) => f;
+const Order = ({ order, setModal }) => {
+  const updateField = (field) => (e) => {
+    dispatch({ type: 'updateValue', field, value: e.target.value });
+  };
+  const [state, dispatch] = useReducer(reducer, order);
   const [more, setMore] = useState(false);
   return (
     <OrderStyles color={order.color}>
@@ -91,7 +100,7 @@ const Order = ({ order }) => {
         </button>
         <span className="color"></span>
         <p className="invoice">#4567783</p>
-        <p> {order.customer.DisplayName} </p>
+        {<p> {order.customer.DisplayName} </p>}
         <button type="button" className="photos">
           <MdPhotoCamera />
         </button>
@@ -102,58 +111,31 @@ const Order = ({ order }) => {
           {order?.services.map((ser) => (
             <li key={ser._id}>
               <label>
-                <input type="checkbox" checked={ser.done} readOnly />
+                <input
+                  type="checkbox"
+                  checked={ser.done}
+                  readOnly
+                  onChange={() => {
+                    console.log(ser._id, order._id);
+                    setModal(true);
+                  }}
+                />
                 {ser.serviceTag}
               </label>
             </li>
           ))}
         </ul>
       </div>
-      <div className={`details${more ? '' : '-hide'}`}>
+      <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>
-        <ul className="service-list">
-          {order?.services.map((ser) => (
-            <li>
-              <fieldset disabled>
-                <label>
-                  service
-                  <input value={ser.name} readOnly />
-                </label>
-                <label>
-                  Parts
-                  <input value={ser.parts} readOnly />
-                </label>
-              </fieldset>
-            </li>
-          ))}
-        </ul>
-        <fieldset className="office-use">
-          <label>
-            Total Parts
-            <input
-              type="number"
-              name="totalParts"
-              value={order.totalParts}
-              onChange={updateField('totalParts')}
-            />
-          </label>
-          <label>
-            Date Recived
-            <input
-              type="date"
-              name="date"
-              value={order.date}
-              onChange={updateField('date')}
-            />
-          </label>
-
-          <p>Recived By {order.recived}</p>
-          <p>Shiping method: {order.shiping}</p>
-          <label>
-            Ready for Shiping ?
-            <input type="checkbox" checked={order.readyToShip} />
-          </label>
-        </fieldset>
+        <form>
+          <OrderInfo
+            state={state}
+            updateField={updateField}
+            dispatch={dispatch}
+          />
+          <input type="submit" value="Update" />
+        </form>
       </div>
     </OrderStyles>
   );

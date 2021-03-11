@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import WorkOrderList from './WorkOrdersList';
 
 import useFetch from '../hooks/useFetch';
+import { useState } from 'react';
 
 const DashboardStyles = styled.div`
   nav {
@@ -32,6 +33,7 @@ const WorkOrdersDashboard = () => {
   const { status } = useParams();
   const { path, url } = useRouteMatch();
   const urlGet = `http://localhost:5000/api/getWorkOrders`;
+  const [modal, setModal] = useState(false);
   const options = {
     credentials: 'include',
   };
@@ -40,8 +42,8 @@ const WorkOrdersDashboard = () => {
   // sort in work
   // ready to be shiped
   if (pendingFetch) return <h2>Loading...</h2>;
-  if (!data) return <h3>No orders</h3>;
-  console.log(status);
+  if (!data || data.length) return <h3>No orders</h3>;
+  console.log(data);
   return (
     <DashboardStyles>
       <nav>
@@ -58,12 +60,18 @@ const WorkOrdersDashboard = () => {
 
         <NavLink to={`/dashboard/readyToShip`}>
           <p>
-            Ready to be Shiped{' '}
+            Ready to be Shipped{' '}
             <span className="count">{data.readyToShip?.length || 0}</span>
           </p>
         </NavLink>
+        <NavLink to={`/dashboard/notRecived`}>
+          <p>
+            Not Recived{' '}
+            <span className="count">{data.notRecived?.length || 0}</span>
+          </p>
+        </NavLink>
       </nav>
-      <WorkOrderList orders={data[status]} />
+      <WorkOrderList orders={data[status]} modal={modal} setModal={setModal} />
     </DashboardStyles>
   );
 };
