@@ -31,7 +31,11 @@ a{
   display:inline-block;
 }
 
-
+.desc {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
 
 `;
 

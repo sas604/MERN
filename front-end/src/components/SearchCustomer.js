@@ -7,7 +7,6 @@ import { MdClose } from 'react-icons/md';
 const SearchCustomerStyles = styled.div`
   max-width: 500px;
   margin: 0 auto;
-  padding: 0 0.5rem;
   position: relative;
 
   h2 {
@@ -90,11 +89,6 @@ const SearchItemStyle = styled.div`
   & :first-child {
     flex: 100%;
   }
-  .desc {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--gray);
-  }
 `;
 const SearchCustomer = () => {
   const [searchResult, setSearchResults] = useState([]);
@@ -164,8 +158,12 @@ const SearchCustomer = () => {
           />
         </label>
         <div className="results">
-          {searchResult.map((cx, i) => (
-            <SearchItemStyle as={Link} to={`/customer/${cx.DisplayName}`}>
+          {searchResult.map((cx) => (
+            <SearchItemStyle
+              key={cx._id}
+              as={Link}
+              to={`/customer/${cx.DisplayName}`}
+            >
               <p>
                 <span className="desc">Display name: </span>
                 {cx.DisplayName}

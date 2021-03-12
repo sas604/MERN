@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import CreateJob from './CreateJob';
 import WorkOrderList from './WorkOrdersList';
 import Portal from './Portal';
+import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -63,16 +64,8 @@ const Customer = () => {
     <>
       <Switch>
         <Route exact path={path}>
-          <CustomerInfo
-            readOnly
-            values={state} // should be cx object
-            updateValue={updateField}
-          >
-            <Portal id="modal">
-              <h1>Shinny New portal</h1>
-            </Portal>
-            <Link to={`${url}/edit`}>Edit</Link>
-          </CustomerInfo>
+          <CustomerInfoNoEdit cx={data.cx} />
+
           <WorkOrderList orders={data.workOrders} />
         </Route>
         <Route path={`${path}/edit`}>
@@ -123,3 +116,8 @@ const Customer = () => {
 };
 
 export default Customer;
+
+// modal example
+/* <Portal id="modal">
+              <h1>Shinny New portal</h1>
+            </Portal> */
