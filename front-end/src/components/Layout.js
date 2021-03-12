@@ -8,6 +8,7 @@ const LayoutStyle = styled.div`
   grid-template-columns: 50px minmax(auto, 300px) 1fr;
   grid-template-rows: minmax(100vh, auto);
   .sidebar {
+    z-index: 99;
     padding-top: 2rem;
     background-color: var(--black);
     grid-column: 1/3;
@@ -32,6 +33,7 @@ const LayoutStyle = styled.div`
   .main {
     grid-column: 2/-1;
     grid-row: 1;
+    padding-top: 2rem;
   }
   &.open {
     .sidebar {

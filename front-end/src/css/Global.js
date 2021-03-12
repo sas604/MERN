@@ -9,9 +9,28 @@ const GlobalStyle = createGlobalStyle`
   --gray:#A8A8AA;
 
 }
+
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+
 body{
   background-color: var(--white);
 }
+input{
+  padding: 0.5rem 1rem;
+}
+
+a{
+  display:inline-block;
+}
+
 
 
 `;
