@@ -207,8 +207,7 @@ exports.getWorkOrders = async (req, res) => {
         },
       },
     ]);
-
-    console.log(sortByStatus);
+    // TODO send Data in adiferent way
     const data = sortByStatus.reduce(
       (a, v) => ({ ...a, [v._id]: [...v.docs] }),
       {}

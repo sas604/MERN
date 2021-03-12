@@ -1,24 +1,20 @@
-const Service = ({ name, parts, dispatch, index, serviceTag }) => {
+const Service = ({ description, dispatch, index, serviceTag }) => {
   return (
     <>
       <fieldset>
-        <label>
-          Service description
-          <input
-            type="text"
-            name="service"
-            value={name}
-            placeholder="Service name"
-            readOnly
-          />
-        </label>
         <label>
           Tag
           <input type="text" name="serviceTag" value={serviceTag} readOnly />
         </label>
         <label>
-          Parts
-          <input type="text" name="parts" value={parts} readOnly />
+          Service description
+          <input
+            type="text"
+            name="description"
+            value={description}
+            placeholder="Service name"
+            readOnly
+          />
         </label>
 
         <button

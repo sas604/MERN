@@ -13,8 +13,7 @@ const workOrderSchema = mongoose.Schema(
     model: String,
     services: [
       {
-        name: String,
-        parts: String,
+        description: String,
         serviceTag: String,
         done: {
           type: Boolean,
@@ -27,7 +26,6 @@ const workOrderSchema = mongoose.Schema(
     color: String,
     recived: String,
     shiping: String,
-    photos: [String],
     status: {
       type: String,
     },

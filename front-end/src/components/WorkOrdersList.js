@@ -12,9 +12,38 @@ const WorkStyles = styled.div`
   }
 `;
 
-const WorkOrderList = ({ orders, modal, setModal }) => {
+const WorkOrderList = ({ orders, setRefetch }) => {
   const { url } = useRouteMatch();
-
+  const [modal, setModal] = useState(false);
+  const openConfirmDialogWithIds = (orderId, serviceID) => {
+    setModal(true);
+    func(orderId, serviceID);
+  };
+  const func = async (orderId, serviceId) => {
+    setModal(true);
+    console.log(orderId, serviceId);
+    // open modal
+    // grab dessision
+    // run the wunction with ids and emaill or without
+    // await updateOeder(orderId, serviceId);
+    // setRefetch((s) => !s);
+  };
+  const updateOeder = async (orederId, serviceId, email = false) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/updateWorkOrder', {
+        credentials: 'include',
+        method: 'POST',
+        orederId,
+        serviceId,
+        email,
+      });
+      if (!res.ok) {
+        throw new Error('Whoops! Something bad happen');
+      }
+      setModal(false);
+      setRefetch((s) => !s);
+    } catch (e) {}
+  };
   if (!orders || !orders.length)
     return (
       <WorkStyles>
@@ -27,7 +56,7 @@ const WorkOrderList = ({ orders, modal, setModal }) => {
       {modal && <EmailConfirm setModal={setModal} />}
       <ul>
         {orders.map((order, i) => (
-          <Order order={order} key={i} setModal={setModal} />
+          <Order order={order} key={i} setModal={func} />
         ))}
       </ul>
       <Link to={`${url}/add`}>Add</Link>

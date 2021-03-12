@@ -2,32 +2,16 @@ import useForm from '../hooks/useForm';
 import styled from 'styled-components';
 
 const AddServiceModalStyles = styled.div`
-  position: absolute;
-  background-color: black;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 `;
 
 const AddService = ({ index, dispatch, close }) => {
-  const [values, updateValue] = useForm({ name: '', parts: '' });
+  const [values, updateValue] = useForm({ description: '', parts: '' });
   return (
     <AddServiceModalStyles>
       <fieldset>
-        <label>
-          Service
-          <input
-            type="text"
-            name="name"
-            value={values.name}
-            placeholder="Service name"
-            onChange={updateValue}
-          />
-        </label>
         <label>
           Service Tag
           <input
@@ -40,12 +24,12 @@ const AddService = ({ index, dispatch, close }) => {
         </label>
 
         <label>
-          Parts
+          Description
           <input
             type="text"
-            name="parts"
-            value={values.parts}
-            placeholder="parts"
+            name="description"
+            value={values.description}
+            placeholder="Description"
             onChange={updateValue}
           />
         </label>

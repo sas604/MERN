@@ -33,11 +33,12 @@ const WorkOrdersDashboard = () => {
   const { status } = useParams();
   const { path, url } = useRouteMatch();
   const urlGet = `http://localhost:5000/api/getWorkOrders`;
-  const [modal, setModal] = useState(false);
+
+  const [refetch, setRefetch] = useState(false);
   const options = {
     credentials: 'include',
   };
-  const [pendingFetch, error, data] = useFetch(urlGet, options);
+  const [pendingFetch, error, data] = useFetch(urlGet, options, refetch);
   // sort whaiting for parts
   // sort in work
   // ready to be shiped
@@ -71,7 +72,7 @@ const WorkOrdersDashboard = () => {
           </p>
         </NavLink>
       </nav>
-      <WorkOrderList orders={data[status]} modal={modal} setModal={setModal} />
+      <WorkOrderList orders={data[status]} setRefetch={setRefetch} />
     </DashboardStyles>
   );
 };

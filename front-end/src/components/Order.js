@@ -84,9 +84,18 @@ const OrderStyles = styled.div`
   .hide {
     display: none;
   }
+  /* li.notdone:first-of-type::before {
+    content: 'Current';
+    position: absolute;
+    top: 0;
+    background-color: red;
+    padding: 0 0.5rem 0.5rem;
+    clip-path: polygon(100% 0, 100% 80%, 50% 100%, 0 80%, 0 0);
+    color: white;
+  } */
 `;
 
-const Order = ({ order, setModal }) => {
+const Order = ({ order, setModal, onService }) => {
   const updateField = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
@@ -101,30 +110,27 @@ const Order = ({ order, setModal }) => {
         <span className="color"></span>
         <p className="invoice">#4567783</p>
         {<p> {order.customer.DisplayName} </p>}
-        <button type="button" className="photos">
-          <MdPhotoCamera />
-        </button>
         <p>
           {order.make} {order.model} {order.year}
         </p>
         <ul className="order-list">
           {order?.services.map((ser) => (
-            <li key={ser._id}>
+            <li key={ser._id} className={`${ser.done ? '' : 'notdone'}`}>
               <label>
                 <input
                   type="checkbox"
-                  checked={ser.done}
+                  // checked={ser.done}
                   readOnly
-                  onChange={() => {
-                    console.log(ser._id, order._id);
-                    setModal(true);
-                  }}
+                  // onChange={() => {
+                  //   setModal(ser._id, order._id);
+                  // }}
                 />
                 {ser.serviceTag}
               </label>
             </li>
           ))}
         </ul>
+        <h3>Status: {order.status} </h3>
       </div>
       <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>

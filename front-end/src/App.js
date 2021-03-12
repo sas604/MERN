@@ -8,8 +8,6 @@ import WorkOrdersDashboard from './components/WorkOrdersDashboard';
 import './App.css';
 
 function App() {
-  const [name, setName] = useState('');
-
   return (
     <Router>
       <div className="App">
@@ -27,6 +25,12 @@ function App() {
               </li>
               <li>
                 <Link to="/dashboard/inProgress">Work orders</Link>
+              </li>
+              <li>
+                <Link to="/createCustomer">Create Customer</Link>
+              </li>
+              <li>
+                <Link to="/test">Create Customer</Link>
               </li>
             </ul>
           </nav>
@@ -54,7 +58,7 @@ function App() {
 
           <Switch>
             <Route exact path="/">
-              <SearchCustomer setName={setName} />
+              <SearchCustomer />
               <div style={{ border: '1px solid white', margin: '3rem' }}>
                 <h3>Or Create a new Customer </h3>
                 <button>Create new customer </button>

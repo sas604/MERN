@@ -50,8 +50,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
             <Service
               key={i}
               dispatch={dispatch}
-              name={service.name}
-              parts={service.parts}
+              description={service.description}
               serviceTag={service.serviceTag}
               index={i}
             />

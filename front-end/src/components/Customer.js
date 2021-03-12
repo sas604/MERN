@@ -7,6 +7,7 @@ import initialState from '../utils/customerReducer';
 import { Link } from 'react-router-dom';
 import CreateJob from './CreateJob';
 import WorkOrderList from './WorkOrdersList';
+import Portal from './Portal';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -66,25 +67,30 @@ const Customer = () => {
             readOnly
             values={state} // should be cx object
             updateValue={updateField}
-          />
+          >
+            <Portal id="modal">
+              <h1>Shinny New portal</h1>
+            </Portal>
+            <Link to={`${url}/edit`}>Edit</Link>
+          </CustomerInfo>
           <WorkOrderList orders={data.workOrders} />
-          <Link to={`${url}/edit`}>Edit</Link>
         </Route>
         <Route path={`${path}/edit`}>
-          <CustomerInfo values={state} updateValue={updateField} />
-          <button
-            type="button"
-            onClick={() =>
-              setPostOptions({
-                credentials: 'include',
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(state),
-              })
-            }
-          >
-            Update
-          </button>
+          <CustomerInfo values={state} updateValue={updateField}>
+            <button
+              type="button"
+              onClick={() =>
+                setPostOptions({
+                  credentials: 'include',
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(state),
+                })
+              }
+            >
+              Update
+            </button>
+          </CustomerInfo>
         </Route>
         <Route path={`${path}/add`}>
           <CreateJob customer={state} />
