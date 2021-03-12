@@ -5,36 +5,14 @@ import CreateCustomer from './components/CreateCustomer';
 import CreateJob from './components/CreateJob';
 import Customer from './components/Customer';
 import WorkOrdersDashboard from './components/WorkOrdersDashboard';
-import './App.css';
+import Layout from './components/Layout';
+import Nav from './components/Nav';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <header className="App-header">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/createjob">Create Job</Link>
-              </li>
-              <li>
-                <Link to="/users">Users</Link>
-              </li>
-              <li>
-                <Link to="/dashboard/inProgress">Work orders</Link>
-              </li>
-              <li>
-                <Link to="/createCustomer">Create Customer</Link>
-              </li>
-              <li>
-                <Link to="/test">Create Customer</Link>
-              </li>
-            </ul>
-          </nav>
-
+      <Layout sidebar={<Nav />}>
+        <div className="App">
           {/* <button
             onClick={() =>
               fetch('http://localhost:5000/api/login')
@@ -59,10 +37,6 @@ function App() {
           <Switch>
             <Route exact path="/">
               <SearchCustomer />
-              <div style={{ border: '1px solid white', margin: '3rem' }}>
-                <h3>Or Create a new Customer </h3>
-                <button>Create new customer </button>
-              </div>
             </Route>
           </Switch>
           <Switch>
@@ -85,8 +59,8 @@ function App() {
               <WorkOrdersDashboard />
             </Route>
           </Switch>
-        </header>
-      </div>
+        </div>
+      </Layout>
     </Router>
   );
 }

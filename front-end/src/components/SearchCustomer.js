@@ -42,7 +42,7 @@ const SearchCustomer = () => {
       }}
     >
       <fieldset>
-        <h3 style={{ color: 'white' }}>Search for cusomer</h3>
+        <h2>Search for cusomer</h2>
         <label htmlFor="Search">Type name</label>
         <input
           list="names"
