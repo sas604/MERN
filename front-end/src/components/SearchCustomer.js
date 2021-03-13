@@ -30,18 +30,7 @@ const SearchCustomerStyles = styled.div`
     margin-top: 5rem;
   }
   .active {
-    border: 0;
-    background-color: var(--black);
-    color: var(--white);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
     display: block;
-    text-align: center;
-    font-size: 1.3rem;
-    transition: all cubic-bezier(0.39, 0.575, 0.565, 1) 0.2s;
-    &:hover {
-      transform: scale(1.05);
-    }
   }
 
   .results > * {
@@ -182,7 +171,7 @@ const SearchCustomer = () => {
       </form>
       <div>
         <h2> Or create a new one </h2>
-        <Link className="active" to="/CreateCustomer">
+        <Link className="active button" to="/CreateCustomer">
           Create a new customer
         </Link>
       </div>

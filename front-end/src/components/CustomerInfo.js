@@ -1,11 +1,11 @@
 // accept customer object
-
+import set from 'lodash/set';
+import { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CustomerStyles = styled.div`
-  margin: 1rem;
-  padding: 1rem;
-  background-color: #f6f6f6;
+  background-color: var(--white);
   display: flex;
   label {
     display: flex;
@@ -30,19 +30,68 @@ const CustomerStyles = styled.div`
       flex: 60%;
     }
   }
+  button {
+    flex: 100%;
+    margin-top: 1rem;
+  }
 `;
+{
+  /* <button
+type="button"
+className="button button--blue"
+onClick={() =>
+  setPostOptions({
+    credentials: 'include',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state),
+  })
+}
+>
+Update
+</button> */
+}
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'updateValue':
+      return { ...set(state, action.field, action.value) };
+    case 'load':
+      return {
+        ...action.data,
+      };
+    default:
+      return;
+  }
+};
 
-const CustomerInfo = ({
-  readOnly = false,
-  values,
-  updateValue = (f) => (e) => e.target,
-  DisplayName,
-  children,
-}) => {
+const CustomerInfo = ({ cx }) => {
+  const history = useHistory();
+  const [values, dispatch] = useReducer(reducer, cx);
+  const updateValue = (field) => (e) => {
+    dispatch({ type: 'updateValue', field, value: e.target.value });
+  };
+
+  const formSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/updatesinglecx', {
+        credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        throw Error('Something bad happened');
+      }
+      history.go(-1);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
-    <>
+    <form onSubmit={formSubmit}>
       <CustomerStyles>
-        <h2>Custromer Info</h2>
+        <h2>Edit Custromer Info</h2>
         <fieldset className="general">
           <label htmlFor="displayedName">
             <span>Display Name</span>
@@ -51,7 +100,7 @@ const CustomerInfo = ({
               name="DisplayName"
               value={values.DisplayName || ''}
               onChange={updateValue('DisplayName')}
-              readOnly={!DisplayName}
+              readOnly
             ></input>
           </label>
 
@@ -62,7 +111,6 @@ const CustomerInfo = ({
               name="CompanyName"
               value={values.CompanyName}
               onChange={updateValue('CompanyName')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="first-name">
@@ -72,7 +120,6 @@ const CustomerInfo = ({
               name="GivenName"
               value={values.GivenName}
               onChange={updateValue('GivenName')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="last-name">
@@ -82,7 +129,6 @@ const CustomerInfo = ({
               name="FamilyName"
               value={values.FamilyName}
               onChange={updateValue('FamilyName')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="email">
@@ -92,7 +138,6 @@ const CustomerInfo = ({
               name="PrimaryEmailAddr.Address"
               value={values.PrimaryEmailAddr.Address || ''}
               onChange={updateValue('PrimaryEmailAddr.Address')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="phone">
@@ -102,7 +147,6 @@ const CustomerInfo = ({
               name="PrimaryPhone.FreeFormNumber"
               value={values.PrimaryPhone?.FreeFormNumber || ''}
               onChange={updateValue('PrimaryPhone.FreeFormNumber')}
-              readOnly={readOnly}
             />
           </label>
         </fieldset>
@@ -115,7 +159,6 @@ const CustomerInfo = ({
               name="ShipAddr.Line1"
               value={values.ShipAddr?.Line1 || ''}
               onChange={updateValue('ShipAddr.Line1')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="ShipAddr.Line2">
@@ -125,7 +168,6 @@ const CustomerInfo = ({
               name="ShipAddr.Line2"
               value={values.ShipAddr?.Line2 || ''}
               onChange={updateValue('ShipAddr.Line2')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="ShipAddr.City">
@@ -135,7 +177,6 @@ const CustomerInfo = ({
               name="ShipAddr.City"
               value={values.ShipAddr?.City || ''}
               onChange={updateValue('ShipAddr.City')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="ShipAddr.CountrySubDivisionCode">
@@ -145,7 +186,6 @@ const CustomerInfo = ({
               name="ShipAddr.CountrySubDivisionCode"
               value={values.ShipAddr?.CountrySubDivisionCode || ''}
               onChange={updateValue('ShipAddr.CountrySubDivisionCode')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="ShipAddr.PostalCode">
@@ -155,7 +195,6 @@ const CustomerInfo = ({
               name="ShipAddr.PostalCode"
               value={values.ShipAddr?.PostalCode || ''}
               onChange={updateValue('ShipAddr.PostalCode')}
-              readOnly={readOnly}
             />
           </label>
         </fieldset>
@@ -168,7 +207,6 @@ const CustomerInfo = ({
               name="BillAddr.Line1"
               value={values.BillAddr?.Line1 || ''}
               onChange={updateValue('BillAddr.Line1')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="BillAddr.Line2">
@@ -178,7 +216,6 @@ const CustomerInfo = ({
               name="BillAddr.Line2"
               value={values.BillAddr?.Line2 || ''}
               onChange={updateValue('BillAddr.Line2')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="BillAddr.City">
@@ -188,7 +225,6 @@ const CustomerInfo = ({
               name="BillAddr.City"
               value={values.BillAddr?.City || ''}
               onChange={updateValue('BillAddr.City')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="BillAddr.CountrySubDivisionCode">
@@ -198,7 +234,6 @@ const CustomerInfo = ({
               name="BillAddr.CountrySubDivisionCode"
               value={values.BillAddr?.CountrySubDivisionCode || ''}
               onChange={updateValue('BillAddr.CountrySubDivisionCode')}
-              readOnly={readOnly}
             />
           </label>
           <label htmlFor="BillAddr.PostalCode">
@@ -208,13 +243,21 @@ const CustomerInfo = ({
               name="BillAddr.PostalCode"
               value={values.BillAddr?.PostalCode || ''}
               onChange={updateValue('BillAddr.PostalCode')}
-              readOnly={readOnly}
             />
           </label>
         </fieldset>
-        {children}
+        <button type="submit" className="button button--blue">
+          Update
+        </button>
+        <button
+          className="button button--red"
+          type="button"
+          onClick={() => history.goBack()}
+        >
+          Cancel
+        </button>
       </CustomerStyles>
-    </>
+    </form>
   );
 };
 
