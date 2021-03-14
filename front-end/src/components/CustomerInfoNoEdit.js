@@ -81,29 +81,6 @@ const CustomerInfoNoEdit = ({ cx }) => {
         </p>
       </div>
       <div className="address">
-        <h2>Shipping Address</h2>
-        <p>
-          <span className="desc">Address Line 1</span>
-          {cx.ShipAddr?.Line1}
-        </p>
-        <p>
-          <span className="desc">Apt/Ste</span>
-          {cx.ShipAddr?.Line2}
-        </p>
-        <p>
-          <span className="desc">City</span>
-          {cx.ShipAddr?.City}
-        </p>
-        <p>
-          <span className="desc">State</span>
-          {cx.ShipAddr?.CountrySubDivisionCode}
-        </p>
-        <p>
-          <span className="desc">ZIP</span>
-          {cx.ShipAddr?.PostalCode}
-        </p>
-      </div>
-      <div className="address">
         <h2>Billing Address</h2>
         <p>
           <span className="desc">Address Line 1</span>
@@ -124,6 +101,29 @@ const CustomerInfoNoEdit = ({ cx }) => {
         <p>
           <span className="desc">ZIP</span>
           {cx.BillAddr?.PostalCode}
+        </p>
+      </div>
+      <div className="address">
+        <h2>Shipping Address</h2>
+        <p>
+          <span className="desc">Address Line 1</span>
+          {cx.ShipAddr?.Line1}
+        </p>
+        <p>
+          <span className="desc">Apt/Ste</span>
+          {cx.ShipAddr?.Line2}
+        </p>
+        <p>
+          <span className="desc">City</span>
+          {cx.ShipAddr?.City}
+        </p>
+        <p>
+          <span className="desc">State</span>
+          {cx.ShipAddr?.CountrySubDivisionCode}
+        </p>
+        <p>
+          <span className="desc">ZIP</span>
+          {cx.ShipAddr?.PostalCode}
         </p>
       </div>
     </CustomerNoEditStyle>

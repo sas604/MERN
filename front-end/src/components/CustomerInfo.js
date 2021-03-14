@@ -1,8 +1,9 @@
 // accept customer object
 import set from 'lodash/set';
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import states from '../utils/states';
 
 const CustomerStyles = styled.div`
   background-color: var(--white);
@@ -34,27 +35,21 @@ const CustomerStyles = styled.div`
     flex: 100%;
     margin-top: 1rem;
   }
+  .shipping-head {
+    display: flex;
+    align-items: flex-end;
+    span {
+      margin: 0 0.2rem 0 1rem;
+    }
+  }
 `;
-{
-  /* <button
-type="button"
-className="button button--blue"
-onClick={() =>
-  setPostOptions({
-    credentials: 'include',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(state),
-  })
-}
->
-Update
-</button> */
-}
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'updateValue':
       return { ...set(state, action.field, action.value) };
+    case 'sameAs':
+      return { ...state, ShipAddr: { ...state.BillAddr } };
     case 'load':
       return {
         ...action.data,
@@ -66,11 +61,11 @@ const reducer = (state, action) => {
 
 const CustomerInfo = ({ cx }) => {
   const history = useHistory();
+  const [same, setSame] = useState(false);
   const [values, dispatch] = useReducer(reducer, cx);
   const updateValue = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
-
   const formSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -150,54 +145,7 @@ const CustomerInfo = ({ cx }) => {
             />
           </label>
         </fieldset>
-        <h3>Shiping Address </h3>
-        <fieldset className="address">
-          <label htmlFor="ShipAddr.Line1">
-            <span>Address Line 1</span>
-            <input
-              type="text"
-              name="ShipAddr.Line1"
-              value={values.ShipAddr?.Line1 || ''}
-              onChange={updateValue('ShipAddr.Line1')}
-            />
-          </label>
-          <label htmlFor="ShipAddr.Line2">
-            <span>Apt/Ste</span>
-            <input
-              type="text"
-              name="ShipAddr.Line2"
-              value={values.ShipAddr?.Line2 || ''}
-              onChange={updateValue('ShipAddr.Line2')}
-            />
-          </label>
-          <label htmlFor="ShipAddr.City">
-            <span>City</span>
-            <input
-              type="text"
-              name="ShipAddr.City"
-              value={values.ShipAddr?.City || ''}
-              onChange={updateValue('ShipAddr.City')}
-            />
-          </label>
-          <label htmlFor="ShipAddr.CountrySubDivisionCode">
-            <span>State</span>
-            <input
-              type="text"
-              name="ShipAddr.CountrySubDivisionCode"
-              value={values.ShipAddr?.CountrySubDivisionCode || ''}
-              onChange={updateValue('ShipAddr.CountrySubDivisionCode')}
-            />
-          </label>
-          <label htmlFor="ShipAddr.PostalCode">
-            <span>ZIP</span>
-            <input
-              type="text"
-              name="ShipAddr.PostalCode"
-              value={values.ShipAddr?.PostalCode || ''}
-              onChange={updateValue('ShipAddr.PostalCode')}
-            />
-          </label>
-        </fieldset>
+
         <h3>Billing Address</h3>
         <fieldset className="address">
           <label htmlFor="BillAddr.Line1">
@@ -230,11 +178,18 @@ const CustomerInfo = ({ cx }) => {
           <label htmlFor="BillAddr.CountrySubDivisionCode">
             <span>State</span>
             <input
-              type="text"
+              maxlength="2"
+              type="list"
+              list="states"
               name="BillAddr.CountrySubDivisionCode"
               value={values.BillAddr?.CountrySubDivisionCode || ''}
               onChange={updateValue('BillAddr.CountrySubDivisionCode')}
             />
+            <datalist id="states">
+              {states.map((state, i) => (
+                <option key={`${i}-${state}`}>{state}</option>
+              ))}
+            </datalist>
           </label>
           <label htmlFor="BillAddr.PostalCode">
             <span>ZIP</span>
@@ -243,6 +198,72 @@ const CustomerInfo = ({ cx }) => {
               name="BillAddr.PostalCode"
               value={values.BillAddr?.PostalCode || ''}
               onChange={updateValue('BillAddr.PostalCode')}
+            />
+          </label>
+        </fieldset>
+        <h3 className="shipping-head">
+          Shiping Address
+          <span className="desc">same as billing</span>
+          <input
+            type="checkbox"
+            checked={same}
+            onChange={() => {
+              setSame((s) => !s);
+              dispatch({ type: 'sameAs' });
+            }}
+          />
+        </h3>
+        <fieldset className="address" disabled={same}>
+          <label htmlFor="ShipAddr.Line1">
+            <span>Address Line 1</span>
+            <input
+              type="text"
+              name="ShipAddr.Line1"
+              value={values.ShipAddr?.Line1 || ''}
+              onChange={updateValue('ShipAddr.Line1')}
+            />
+          </label>
+          <label htmlFor="ShipAddr.Line2">
+            <span>Apt/Ste</span>
+            <input
+              type="text"
+              name="ShipAddr.Line2"
+              value={values.ShipAddr?.Line2 || ''}
+              onChange={updateValue('ShipAddr.Line2')}
+            />
+          </label>
+          <label htmlFor="ShipAddr.City">
+            <span>City</span>
+            <input
+              type="text"
+              name="ShipAddr.City"
+              value={values.ShipAddr?.City || ''}
+              onChange={updateValue('ShipAddr.City')}
+            />
+          </label>
+          <label htmlFor="ShipAddr.CountrySubDivisionCode">
+            <span>State</span>
+            <input
+              maxlength="2"
+              type="list"
+              list="states"
+              name="ShipAddr.CountrySubDivisionCode"
+              value={values.ShipAddr?.CountrySubDivisionCode || ''}
+              onChange={updateValue('ShipAddr.CountrySubDivisionCode')}
+            />
+            <datalist id="states">
+              {states.map((state, i) => (
+                <option key={`${i}-${state}`}>{state}</option>
+              ))}
+            </datalist>
+          </label>
+          <label htmlFor="ShipAddr.PostalCode">
+            <span>ZIP</span>
+            <input
+              type="text"
+              name="ShipAddr.PostalCode"
+              value={values.ShipAddr?.PostalCode || ''}
+              onChange={updateValue('ShipAddr.PostalCode')}
             />
           </label>
         </fieldset>
