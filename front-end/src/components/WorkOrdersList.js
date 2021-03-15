@@ -27,6 +27,7 @@ const WorkOrderList = ({ orders, setRefetch }) => {
     // run the wunction with ids and emaill or without
     // await updateOeder(orderId, serviceId);
     // setRefetch((s) => !s);
+    // move update into order
   };
   const updateOeder = async (orederId, serviceId, email = false) => {
     try {
@@ -47,19 +48,23 @@ const WorkOrderList = ({ orders, setRefetch }) => {
   if (!orders || !orders.length)
     return (
       <WorkStyles>
+        <Link className="button" to={`${url}/add`}>
+          Add New Work Order
+        </Link>
         <h3>No Orders</h3>
-        <Link to={`${url}/add`}>Add Work Order</Link>
       </WorkStyles>
     );
   return (
     <WorkStyles>
+      <Link className="button" to={`${url}/add`}>
+        Add New Work Order
+      </Link>
       {modal && <EmailConfirm setModal={setModal} />}
       <ul>
         {orders.map((order, i) => (
           <Order order={order} key={i} setModal={func} />
         ))}
       </ul>
-      <Link to={`${url}/add`}>Add</Link>
     </WorkStyles>
   );
 };

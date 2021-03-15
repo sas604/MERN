@@ -2,50 +2,72 @@ import useForm from '../hooks/useForm';
 import styled from 'styled-components';
 
 const AddServiceModalStyles = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
+  * + * {
+    margin-top: 1rem;
+  }
+  label {
+    display: block;
+  }
+  h5 {
+    margin: 0.5rem 0;
+  }
+  input,
+  textarea {
+    padding: 0.5rem 1rem;
+    width: 100%;
+  }
+  input {
+    text-transform: uppercase;
+  }
 `;
 
-const AddService = ({ index, dispatch, close }) => {
-  const [values, updateValue] = useForm({ description: '', parts: '' });
+const AddService = ({ index, dispatch }) => {
+  const [values, updateValue, reset] = useForm({
+    description: '',
+    serviceTag: '',
+  });
   return (
     <AddServiceModalStyles>
-      <fieldset>
-        <label>
-          Service Tag
-          <input
-            type="text"
-            name="serviceTag"
-            value={values.serviceTag}
-            placeholder="Tag "
-            onChange={updateValue}
-          />
-        </label>
+      <h5>Add Service</h5>
+      <label htmlFor="serviceTag">
+        Service Tag
+        <input
+          required
+          id="serviceTag"
+          type="text"
+          name="serviceTag"
+          value={values.serviceTag}
+          placeholder="Tag "
+          onChange={updateValue}
+        />
+      </label>
 
-        <label>
-          Description
-          <input
-            type="text"
-            name="description"
-            value={values.description}
-            placeholder="Description"
-            onChange={updateValue}
-          />
-        </label>
+      <label htmlFor="desc">
+        Description
+        <textarea
+          id="desc"
+          type="text"
+          name="description"
+          value={values.description}
+          placeholder="Description"
+          onChange={updateValue}
+        />
+      </label>
 
-        <button
-          type="button"
-          onClick={() =>
-            dispatch({ type: 'addService', index, form: values, close })
+      <button
+        className="button"
+        type="button"
+        onClick={() => {
+          if (!values.serviceTag) {
+            console.log('set Error here');
+            return;
           }
-        >
-          add
-        </button>
-        <button type="button" onClick={() => close()}>
-          cancel
-        </button>
-      </fieldset>
+          dispatch({ type: 'addService', index, form: values });
+          reset();
+        }}
+      >
+        ADD SERVICE
+      </button>
     </AddServiceModalStyles>
   );
 };

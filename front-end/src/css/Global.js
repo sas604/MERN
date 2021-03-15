@@ -31,6 +31,14 @@ a{
   display:inline-block;
 }
 
+h2{
+  margin:unset;
+ margin-top:2rem;
+ margin-bottom:1rem;
+}
+fieldset{
+  margin-top :1rem;
+}
 .desc {
     display: block;
     font-size: 0.8rem;
@@ -58,6 +66,9 @@ a{
   .button--blue{
     background-color:var(--blue)
   }
+  .warning{
+    color: var(--red);
+  }
 
 #modal{
   position:fixed;
@@ -69,7 +80,15 @@ a{
   background-color:black;
 }
 
+.max-width{
+  max-width:1100px;
+  margin: 0 auto;
+}
 
+.top-bottom {
+  padding-top:3rem;
+  padding-bottom:3rem;
+}
 `;
 
 export default GlobalStyle;

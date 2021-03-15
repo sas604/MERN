@@ -39,11 +39,11 @@ const Customer = () => {
   if (error) return <h1>Oh snap errror</h1>;
 
   return (
-    <>
+    <div className="max-width top-bottom">
       <Switch>
         <Route exact path={path}>
           <CustomerInfoNoEdit cx={data.cx} />
-
+          <h2>Work Orders</h2>
           <WorkOrderList orders={data.workOrders} />
         </Route>
         <Route path={`${path}/edit`}>
@@ -53,30 +53,8 @@ const Customer = () => {
           <CreateJob customer={data.cx} />
         </Route>
       </Switch>
-    </>
+    </div>
   );
-
-  // return (
-  //   <LI>
-  //     <button type="button" onClick={() => setEdit(true)}>
-  //       Edit
-  //     </button>
-  //     <CustomerInfo */}
-  //       readOnly={!edit}
-  //       values={state} // should be cx object
-  //       updateValue={updateField}
-  //     />
-  //     {edit && (
-  //       <>
-  //
-  //         <button type="button" onClick={() => setEdit(false)}>
-  //           Cancel
-  //         </button>
-  //         <button type="button">Create new job</button>
-  //       </>
-  //     )}
-  //   </LI>
-  // );
 };
 
 export default Customer;

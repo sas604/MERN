@@ -3,6 +3,7 @@ import { MdPhotoCamera, MdExpandMore, MdExpandLess } from 'react-icons/md';
 import { useReducer, useState } from 'react';
 import OrderInfo from './OrderInfo';
 import { reducer, initialState } from '../utils/jobReducer';
+
 const OrderStyles = styled.div`
   border: 1px solid black;
   margin: 1rem 0;
@@ -84,15 +85,6 @@ const OrderStyles = styled.div`
   .hide {
     display: none;
   }
-  /* li.notdone:first-of-type::before {
-    content: 'Current';
-    position: absolute;
-    top: 0;
-    background-color: red;
-    padding: 0 0.5rem 0.5rem;
-    clip-path: polygon(100% 0, 100% 80%, 50% 100%, 0 80%, 0 0);
-    color: white;
-  } */
 `;
 
 const Order = ({ order, setModal, onService }) => {
@@ -119,7 +111,7 @@ const Order = ({ order, setModal, onService }) => {
               <label>
                 <input
                   type="checkbox"
-                  // checked={ser.done}
+                  checked={ser.done}
                   readOnly
                   // onChange={() => {
                   //   setModal(ser._id, order._id);

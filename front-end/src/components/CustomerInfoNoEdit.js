@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import { FaPencilAlt } from 'react-icons/fa';
-import { useState } from 'react';
-import Portal from './Portal';
-import CustomerInfo from './CustomerInfo';
 import { Link, useRouteMatch } from 'react-router-dom';
 const CustomerNoEditStyle = styled.div`
   position: relative;

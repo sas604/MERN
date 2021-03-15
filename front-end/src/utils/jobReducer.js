@@ -1,4 +1,5 @@
 import set from 'lodash/set';
+import moveArray from './arrayMove';
 
 export const initialState = {
   customer: '',
@@ -24,8 +25,13 @@ export const reducer = (state, action) => {
       };
     case 'setCx':
       return { ...state, customer: action.cx };
+    case 'sort':
+      return {
+        ...state,
+        services: moveArray(state.services, action.pos, action.index),
+      };
+
     case 'addService':
-      action.close();
       return { ...state, services: [...state.services, { ...action.form }] };
     case 'removeService':
       return {

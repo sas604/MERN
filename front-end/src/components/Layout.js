@@ -34,7 +34,6 @@ const LayoutStyle = styled.div`
     grid-column: 2/-1;
     grid-row: 1;
     padding: 0 0.5rem;
-    padding-top: 2rem;
   }
   &.open {
     .sidebar {

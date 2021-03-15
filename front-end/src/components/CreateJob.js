@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import CustomerInfo from './CustomerInfo';
+import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 import { reducer, initialState } from '../utils/jobReducer';
 
 import { useHistory } from 'react-router-dom';
@@ -12,6 +12,7 @@ const CreateJob = ({ customer }) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  // set customer in the state
   useEffect(() => dispatch({ type: 'setCx', cx: customer._id }), []);
   const [error, setError] = useState(false);
   const url = `http://localhost:5000/api/createWorkOrder`;
@@ -38,7 +39,7 @@ const CreateJob = ({ customer }) => {
 
   return (
     <form onSubmit={createOrder}>
-      <CustomerInfo readOnly values={customer} />
+      <h2>New Work Order for - {customer.DisplayName}</h2>
       <OrderInfo dispatch={dispatch} state={state} updateField={updateField} />
       <input type="submit" value="Create New Work Order" />
     </form>

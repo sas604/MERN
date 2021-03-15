@@ -1,17 +1,38 @@
-import { useState } from 'react';
+import styled from 'styled-components';
 import AddService from './AddService';
 import Service from './Service';
 
+const WorkOrderStyles = styled.div`
+  fieldset + fieldset {
+    margin-top: 1rem;
+  }
+  .head {
+    background-color: var(--black);
+    display: flex;
+    flex-wrap: wrap;
+    border: unset;
+
+    label {
+      flex: 1;
+      color: var(--white);
+      margin: 0.5rem;
+    }
+    input {
+      width: 100%;
+      min-width: 150px;
+    }
+  }
+`;
+
 const OrderInfo = ({ state, updateField, dispatch }) => {
-  const [servicesModal, setServicesModal] = useState(false);
   return (
-    <>
+    <WorkOrderStyles>
       <div className="work-order">
-        <h2>Work Oder Info</h2>
-        <fieldset>
+        <fieldset className="head">
           <label htmlFor="year">
             YEAR
             <input
+              id="year"
               type="number"
               name="year"
               value={state.year}
@@ -22,6 +43,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           <label htmlFor="make">
             MAKE
             <input
+              id="make"
               type="text"
               name="make"
               value={state.make}
@@ -31,6 +53,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           <label htmlFor="model">
             MODEL
             <input
+              id="model"
               type="text"
               name="model"
               value={state.model}
@@ -39,25 +62,21 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           </label>
         </fieldset>
         <fieldset className="service" style={{ position: 'relative' }}>
-          {servicesModal && (
-            <AddService
-              dispatch={dispatch}
-              close={() => setServicesModal(false)}
-            />
+          <AddService dispatch={dispatch} />
+          <h3>Services to be performed </h3>
+          {state.services.length > 0 ? (
+            state.services?.map((service, i) => (
+              <Service
+                key={i}
+                index={i}
+                dispatch={dispatch}
+                description={service.description}
+                serviceTag={service.serviceTag}
+              />
+            ))
+          ) : (
+            <p className="warning">No services added</p>
           )}
-          <h3>Service to be performed </h3>
-          {state.services.map((service, i) => (
-            <Service
-              key={i}
-              dispatch={dispatch}
-              description={service.description}
-              serviceTag={service.serviceTag}
-              index={i}
-            />
-          ))}
-          <button type="button" onClick={() => setServicesModal(true)}>
-            ADD +
-          </button>
         </fieldset>
       </div>
 
@@ -137,7 +156,10 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           />
         </label>
       </fieldset>
-    </>
+    </WorkOrderStyles>
   );
 };
 export default OrderInfo;
+{
+  /*  */
+}
