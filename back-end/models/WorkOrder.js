@@ -23,11 +23,12 @@ const workOrderSchema = mongoose.Schema(
     ],
     totalParts: { type: Number, default: 0 },
     dateRecived: String,
-    color: String,
+    color: [String],
     recived: String,
     shiping: String,
     status: {
       type: String,
+      default: 'inProgress',
     },
     needsParts: Boolean,
     whaitingForParts: Boolean,

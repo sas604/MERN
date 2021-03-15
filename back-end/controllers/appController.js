@@ -174,7 +174,7 @@ exports.createWorkOrder = async (req, res) => {
     res.status(200).json('success');
   } catch (e) {
     console.error(e);
-    res.staus(400).json(e);
+    res.status(400).json(e);
   }
 };
 exports.getWorkOrders = async (req, res) => {

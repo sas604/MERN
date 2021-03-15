@@ -7,21 +7,34 @@ export const initialState = {
   make: '',
   model: '',
   totalParts: '',
-  color: '#000000',
+  color: ['#ffffff00', '#ffffff00', '#ffffff00'],
   dateRecived: '',
   recived: '',
   shiping: '',
   services: [],
   invoice: '',
-  status: '',
+  status: 'inProgress',
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'updateValue':
+      if (action.field === 'color') {
+        state.color[0] = action.value;
+        return { ...state };
+      }
+      if (action.field === 'color-1') {
+        state.color[1] = action.value;
+
+        return { ...state };
+      }
+      if (action.field === 'color-2') {
+        state.color[2] = action.value;
+
+        return { ...state };
+      }
       return {
         ...set(state, action.field, action.value),
-        status: state.dateRecived ? 'inProgress' : 'notRecived',
       };
     case 'setCx':
       return { ...state, customer: action.cx };

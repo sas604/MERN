@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 import { reducer, initialState } from '../utils/jobReducer';
-
 import { useHistory } from 'react-router-dom';
 import OrderInfo from './OrderInfo';
 
 const CreateJob = ({ customer }) => {
-  const { history } = useHistory();
+  const history = useHistory();
 
   const updateField = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
@@ -24,13 +23,18 @@ const CreateJob = ({ customer }) => {
   };
   const createOrder = async (e) => {
     e.preventDefault();
+    if (state.services.length < 1) {
+      setError('Please add services');
+      return;
+    }
     try {
       const res = await fetch(url, options);
       if (!res.ok) {
         console.log(e);
         setError(e);
       } else {
-        console.log(res);
+        await history.push('/dashboard/inProgress');
+        console.log(history);
       }
     } catch (e) {
       setError(e);
@@ -41,7 +45,7 @@ const CreateJob = ({ customer }) => {
     <form onSubmit={createOrder}>
       <h2>New Work Order for - {customer.DisplayName}</h2>
       <OrderInfo dispatch={dispatch} state={state} updateField={updateField} />
-      <input type="submit" value="Create New Work Order" />
+      <input type="submit" className="button" value="Create New Work Order" />
     </form>
   );
 };

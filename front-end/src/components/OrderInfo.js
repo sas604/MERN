@@ -3,9 +3,14 @@ import AddService from './AddService';
 import Service from './Service';
 
 const WorkOrderStyles = styled.div`
+  margin-bottom: 1rem;
   fieldset + fieldset {
     margin-top: 1rem;
   }
+  input {
+    width: 100%;
+  }
+
   .head {
     background-color: var(--black);
     display: flex;
@@ -18,8 +23,33 @@ const WorkOrderStyles = styled.div`
       margin: 0.5rem;
     }
     input {
-      width: 100%;
       min-width: 150px;
+    }
+  }
+  .office-use {
+    label:first-of-type {
+      width: 100px;
+    }
+    label {
+      display: inline-block;
+      margin-right: 2rem;
+    }
+  }
+  input[type='color'] {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+  }
+  input[type='radio'] {
+    width: unset;
+    margin: 0 0.5rem;
+  }
+  .colors {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    span {
+      margin-right: 1rem;
     }
   }
 `;
@@ -81,6 +111,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
       </div>
 
       <fieldset className="office-use">
+        <h2>Work Order Info</h2>
         <label>
           Total Parts
           <input
@@ -99,15 +130,27 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
             onChange={updateField('dateRecived')}
           />
         </label>
-        <label>
-          Color Tag
+        <div className="colors">
+          <span>Color Tags:</span>
           <input
             type="color"
-            name="color"
-            value={state.color}
+            value={state.color[0]}
             onChange={updateField('color')}
           />
-        </label>
+          <input
+            type="color"
+            value={state.color[1]}
+            disabled={state.color.length < 1}
+            onChange={updateField('color-1')}
+          />
+          <input
+            type="color"
+            value={state.color[2]}
+            disabled={state.color.length < 2}
+            onChange={updateField('color-2')}
+          />
+        </div>
+
         <p>Recived By</p>
         <label>
           Shipped
@@ -160,6 +203,3 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
   );
 };
 export default OrderInfo;
-{
-  /*  */
-}

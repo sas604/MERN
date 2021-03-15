@@ -17,7 +17,7 @@ import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 
 // customer component
 const Customer = () => {
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const [addNew, setAddNew] = useState(false);
   const { name } = useParams();
   const options = {
@@ -44,6 +44,9 @@ const Customer = () => {
         <Route exact path={path}>
           <CustomerInfoNoEdit cx={data.cx} />
           <h2>Work Orders</h2>
+          <Link className="button" to={`${url}/add`}>
+            Add New Work Order
+          </Link>
           <WorkOrderList orders={data.workOrders} />
         </Route>
         <Route path={`${path}/edit`}>

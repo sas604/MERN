@@ -32,7 +32,6 @@ const AddService = ({ index, dispatch }) => {
       <label htmlFor="serviceTag">
         Service Tag
         <input
-          required
           id="serviceTag"
           type="text"
           name="serviceTag"
