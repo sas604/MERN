@@ -45,7 +45,9 @@ fieldset{
     color: var(--gray);
   }
   
-
+.capital{
+  text-transform: uppercase;
+}
   .button {
     border: 0;
     display:inline-block;

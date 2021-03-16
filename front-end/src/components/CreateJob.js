@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 import { reducer, initialState } from '../utils/jobReducer';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import OrderInfo from './OrderInfo';
 
 const CreateJob = ({ customer }) => {
@@ -46,6 +46,14 @@ const CreateJob = ({ customer }) => {
       <h2>New Work Order for - {customer.DisplayName}</h2>
       <OrderInfo dispatch={dispatch} state={state} updateField={updateField} />
       <input type="submit" className="button" value="Create New Work Order" />
+      <button
+        style={{ marginLeft: 25, cursor: 'pointer' }}
+        type="button"
+        onClick={() => history.goBack()}
+        className="button button--red"
+      >
+        Cancel
+      </button>
     </form>
   );
 };

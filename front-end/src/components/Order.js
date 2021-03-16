@@ -5,10 +5,10 @@ import OrderInfo from './OrderInfo';
 import { reducer, initialState } from '../utils/jobReducer';
 
 const OrderStyles = styled.div`
-  border: 1px solid black;
   margin: 1rem 0;
-  transition: all 0.5s;
-
+  background-color: white;
+  box-shadow: 0px 10px 13px -7px #0000002e;
+  padding: 0.5rem;
   li {
     list-style: none;
   }
@@ -16,10 +16,8 @@ const OrderStyles = styled.div`
     margin-top: 1rem;
   }
   .work-order-min {
-    padding: 1rem;
     position: relative;
     z-index: 5;
-    background-color: white;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -29,10 +27,13 @@ const OrderStyles = styled.div`
   }
   .color {
     flex: 1;
-    align-self: center;
-    display: block;
-    background-color: ${(props) => props.color || 'red'};
-    aspect-ratio: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+      flex: 0 1 40px;
+    }
   }
   .invoice {
     flex: 1;
@@ -53,6 +54,7 @@ const OrderStyles = styled.div`
       align-items: center;
     }
     input[type='checkbox'] {
+      margin-right: 0.5rem;
       -webkit-appearance: none;
       width: 30px;
       height: 30px;
@@ -85,6 +87,29 @@ const OrderStyles = styled.div`
   .hide {
     display: none;
   }
+  .details {
+    padding: 1rem;
+  }
+  .details-info,
+  .service-info__item {
+    display: flex;
+    margin-top: 1rem;
+    & :not(:first-child) {
+      margin-left: 3rem;
+    }
+    p {
+      flex: 75%;
+    }
+    p:first-of-type {
+      flex: 10%;
+    }
+  }
+`;
+
+const ClorSpan = styled.span`
+  flex: 1;
+  aspect-ratio: 1/1;
+  background-color: ${(props) => props.color};
 `;
 
 const Order = ({ order, setModal, onService }) => {
@@ -94,12 +119,16 @@ const Order = ({ order, setModal, onService }) => {
   const [state, dispatch] = useReducer(reducer, order);
   const [more, setMore] = useState(false);
   return (
-    <OrderStyles color={order.color}>
+    <OrderStyles>
       <div className="work-order-min">
         <button className="expand" onClick={() => setMore(!more)} type="button">
           {more ? <MdExpandLess /> : <MdExpandMore />}
         </button>
-        <span className="color"></span>
+        <div className="color">
+          {order.color?.map((c, i) => (
+            <ClorSpan key={`${i}-${c}`} color={c}></ClorSpan>
+          ))}
+        </div>
         <p className="invoice">#4567783</p>
         {<p> {order.customer.DisplayName} </p>}
         <p>
@@ -108,15 +137,8 @@ const Order = ({ order, setModal, onService }) => {
         <ul className="order-list">
           {order?.services.map((ser) => (
             <li key={ser._id} className={`${ser.done ? '' : 'notdone'}`}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={ser.done}
-                  readOnly
-                  // onChange={() => {
-                  //   setModal(ser._id, order._id);
-                  // }}
-                />
+              <label className="capital">
+                <input type="checkbox" checked={ser.done} readOnly />
                 {ser.serviceTag}
               </label>
             </li>
@@ -126,14 +148,46 @@ const Order = ({ order, setModal, onService }) => {
       </div>
       <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>
-        <form>
-          <OrderInfo
-            state={state}
-            updateField={updateField}
-            dispatch={dispatch}
-          />
-          <input type="submit" value="Update" />
-        </form>
+        <div className="details-info">
+          <p>
+            <span className="desc">Year</span>
+            {order.year}
+          </p>
+          <p>
+            <span className="desc">Make</span>
+            {order.make}
+          </p>
+          <p>
+            <span className="desc">Model</span>
+            {order.model}
+          </p>
+          <p>
+            <span className="desc">Date Recived</span>
+            {order.dateRecived}
+          </p>
+          <p>
+            <span className="desc">Recived by</span>
+            {order.recived}
+          </p>
+          <p>
+            <span className="desc">Shipping</span>
+            {order.shiping}
+          </p>
+        </div>
+        <div className="service-info">
+          {order.services.map((ser) => (
+            <div className="service-info__item" key={ser._id}>
+              <p className="capital">
+                <span className="desc">Service Tag</span>
+                {ser.serviceTag}
+              </p>
+              <p>
+                <span className="desc">Description</span>
+                {ser.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </OrderStyles>
   );

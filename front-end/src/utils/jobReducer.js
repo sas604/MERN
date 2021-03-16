@@ -7,7 +7,7 @@ export const initialState = {
   make: '',
   model: '',
   totalParts: '',
-  color: ['#ffffff00', '#ffffff00', '#ffffff00'],
+  color: ['#FFFFFF', '#FFFFFF', '#FFFFFF'],
   dateRecived: '',
   recived: '',
   shiping: '',
@@ -38,6 +38,16 @@ export const reducer = (state, action) => {
       };
     case 'setCx':
       return { ...state, customer: action.cx };
+    case 'del':
+      if (state.color.length === 1) {
+        return { ...state };
+      }
+      return {
+        ...state,
+        color: state.color.filter(
+          (el) => el !== state.color[state.color.length - 1]
+        ),
+      };
     case 'sort':
       return {
         ...state,

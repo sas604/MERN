@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import AddService from './AddService';
 import Service from './Service';
+import { FiDelete } from 'react-icons/fi';
 
 const WorkOrderStyles = styled.div`
   margin-bottom: 1rem;
@@ -50,6 +51,11 @@ const WorkOrderStyles = styled.div`
     align-items: center;
     span {
       margin-right: 1rem;
+    }
+    button {
+      background-color: transparent;
+      color: var(--red);
+      cursor: pointer;
     }
   }
 `;
@@ -137,18 +143,30 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
             value={state.color[0]}
             onChange={updateField('color')}
           />
-          <input
-            type="color"
-            value={state.color[1]}
-            disabled={state.color.length < 1}
-            onChange={updateField('color-1')}
-          />
-          <input
-            type="color"
-            value={state.color[2]}
-            disabled={state.color.length < 2}
-            onChange={updateField('color-2')}
-          />
+          {state.color[0] !== '#FFFFFF' && (
+            <input
+              type="color"
+              value={state.color[1]}
+              onChange={updateField('color-1')}
+            />
+          )}
+          {state.color[1] !== '#FFFFFF' && (
+            <input
+              type="color"
+              value={state.color[2]}
+              onChange={updateField('color-2')}
+            />
+          )}
+          {/* TODO fix it  */}
+          {state.color[0] !== '#FFFFFF' && (
+            <button
+              type="button"
+              className="button"
+              onClick={() => dispatch({ type: 'del' })}
+            >
+              <FiDelete />
+            </button>
+          )}
         </div>
 
         <p>Recived By</p>
