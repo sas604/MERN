@@ -29,11 +29,9 @@ const CreateJob = ({ customer }) => {
     try {
       const res = await fetch(url, options);
       if (!res.ok) {
-        console.log(e);
-        setError(e);
+        throw Error('Cant Create Work Order');
       } else {
-        await history.push('/dashboard/inProgress');
-        console.log(history);
+        history.push('/dashboard/inProgress');
       }
     } catch (e) {
       setError(e);

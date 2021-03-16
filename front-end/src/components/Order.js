@@ -1,8 +1,6 @@
 import styled from 'styled-components';
-import { MdPhotoCamera, MdExpandMore, MdExpandLess } from 'react-icons/md';
-import { useReducer, useState } from 'react';
-import OrderInfo from './OrderInfo';
-import { reducer, initialState } from '../utils/jobReducer';
+import { MdExpandMore, MdExpandLess } from 'react-icons/md';
+import { useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { Link, useRouteMatch } from 'react-router-dom';
 const OrderStyles = styled.div`

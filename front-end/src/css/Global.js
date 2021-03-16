@@ -68,6 +68,10 @@ fieldset{
   .button--blue{
     background-color:var(--blue)
   }
+  .button--fullwidth{
+    display:block;
+    width:100%
+  }
   .warning{
     color: var(--red);
   }

@@ -39,7 +39,7 @@ const Customer = () => {
   if (error) return <h1>Oh snap errror</h1>;
 
   return (
-    <div className="max-width top-bottom">
+    <div className="max-width ">
       <Switch>
         <Route exact path={path}>
           <CustomerInfoNoEdit cx={data.cx} />

@@ -38,6 +38,8 @@ export const reducer = (state, action) => {
       };
     case 'setCx':
       return { ...state, customer: action.cx };
+    case 'setOrder':
+      return { ...action.data };
     case 'del':
       if (state.color.length === 1) {
         return { ...state };

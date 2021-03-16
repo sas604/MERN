@@ -43,7 +43,6 @@ const WorkOrdersDashboard = () => {
   // ready to be shiped
   if (pendingFetch) return <h2>Loading...</h2>;
   if (!data || data.length) return <h3>No orders</h3>;
-  console.log(data);
   return (
     <DashboardStyles>
       <nav>
