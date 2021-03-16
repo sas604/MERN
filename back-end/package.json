@@ -14,7 +14,8 @@
     "mongoose": "^5.11.18",
     "node-quickbooks": "^2.0.37",
     "qs": "^6.9.6",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "socket.io": "^4.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

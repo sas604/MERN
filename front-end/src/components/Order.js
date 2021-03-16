@@ -8,6 +8,7 @@ const OrderStyles = styled.div`
   background-color: white;
   box-shadow: 0px 10px 13px -7px #0000002e;
   padding: 0.5rem;
+  flex-wrap: wrap;
   li {
     list-style: none;
   }
@@ -25,14 +26,10 @@ const OrderStyles = styled.div`
     }
   }
   .color {
-    flex: 1;
+    flex: 0 0 3rem;
+    align-self: stretch;
     justify-content: center;
-    align-items: center;
     display: flex;
-    flex-wrap: wrap;
-    > * {
-      flex: 0 1 40px;
-    }
   }
   .invoice {
     flex: 1;
@@ -67,7 +64,8 @@ const OrderStyles = styled.div`
   }
   && button {
     cursor: pointer;
-    flex: 1;
+    padding: 0;
+    flex: 0 10px;
     display: flex;
     align-self: stretch;
     align-items: center;
@@ -116,12 +114,33 @@ const OrderStyles = styled.div`
 
 const ClorSpan = styled.span`
   flex: 1;
-  aspect-ratio: 1/1;
   background-color: ${(props) => props.color};
 `;
 
 const Order = ({ order }) => {
   const { url } = useRouteMatch();
+  const updateStatus = (id) => async (e) => {
+    const postUrl = `http://localhost:5000/api/updateWorkOrder`;
+    const options = {
+      credentials: 'include',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        _id: id,
+        status: e.target.value,
+      }),
+    };
+    try {
+      const res = await fetch(postUrl, options);
+      if (!res.ok) {
+        throw Error('Cant Update Order');
+      } else {
+        console.log('success');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const [more, setMore] = useState(false);
   return (
     <OrderStyles>
@@ -135,7 +154,7 @@ const Order = ({ order }) => {
           ))}
         </div>
         <p className="invoice">#4567783</p>
-        {<p> {order.customer.DisplayName} </p>}
+
         <p>
           {order.make} {order.model} {order.year}
         </p>
@@ -149,7 +168,20 @@ const Order = ({ order }) => {
             </li>
           ))}
         </ul>
-        <h3>Status: {order.status} </h3>
+        <label htmlFor="status">
+          Status
+          <select
+            name="status"
+            onChange={updateStatus(order._id)}
+            value={order.status}
+          >
+            <option value="inProgress">In progress </option>
+            <option value="waitingOnParts">Waiting on parts </option>
+            <option value="readyToBuild">Ready to build </option>
+            <option value="readyToShip">Ready to ship</option>
+            <option value="waitingForPayment">Waiting for payment</option>
+          </select>
+        </label>
       </div>
       <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>
@@ -157,6 +189,12 @@ const Order = ({ order }) => {
           <FaPencilAlt />
         </Link>
         <div className="details-info">
+          {
+            <p>
+              <span className="desc">Name</span>
+              {order.customer.DisplayName}
+            </p>
+          }
           <p>
             <span className="desc">Year</span>
             {order.year}

@@ -208,11 +208,7 @@ exports.getWorkOrders = async (req, res) => {
       },
     ]);
     // TODO send Data in adiferent way
-    const data = sortByStatus.reduce(
-      (a, v) => ({ ...a, [v._id]: [...v.docs] }),
-      {}
-    );
-    res.json(data);
+    res.json(sortByStatus);
   } catch (e) {
     console.error(e);
     res.json(e);
@@ -228,8 +224,10 @@ exports.getWorkOrder = async (req, res) => {
   }
 };
 exports.updateWorkOrder = async (req, res) => {
+  console.log(req.body);
   try {
     const order = await WorkOrder.findByIdAndUpdate(req.body._id, req.body);
+
     res.status(200).json('success');
   } catch (e) {
     res.status(400).json(e);

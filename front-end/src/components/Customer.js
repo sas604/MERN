@@ -1,4 +1,3 @@
-import { useEffect, useReducer, useState } from 'react';
 import {
   Route,
   Switch,
@@ -18,7 +17,6 @@ import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 // customer component
 const Customer = () => {
   const { path, url } = useRouteMatch();
-  const [addNew, setAddNew] = useState(false);
   const { name } = useParams();
   const options = {
     credentials: 'include',

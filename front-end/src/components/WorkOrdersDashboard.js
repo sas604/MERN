@@ -1,9 +1,16 @@
-import { Link, NavLink, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 import styled from 'styled-components';
 import WorkOrderList from './WorkOrdersList';
 
 import useFetch from '../hooks/useFetch';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
 const DashboardStyles = styled.div`
   nav {
@@ -29,6 +36,8 @@ const DashboardStyles = styled.div`
 `;
 
 const WorkOrdersDashboard = () => {
+  const location = useLocation();
+  console.log(location.key);
   //get all working orders from db
   const { status } = useParams();
   const { path, url } = useRouteMatch();
@@ -38,39 +47,61 @@ const WorkOrdersDashboard = () => {
     credentials: 'include',
   };
   const [pendingFetch, error, data] = useFetch(urlGet, options, refetch);
-  // sort whaiting for parts
-  // sort in work
-  // ready to be shiped
+
+  useEffect(() => {
+    console.log('1');
+    const socket = io('http://localhost:5000');
+    socket.on('connect', () => {
+      console.log('socet conected');
+    });
+    socket.on('Hello', () => setRefetch((s) => !s));
+    return () => socket.disconnect();
+  }, []);
+
   if (pendingFetch) return <h2>Loading...</h2>;
-  if (!data || data.length) return <h3>No orders</h3>;
+  if (!data) return <h3>No orders</h3>;
+  const statuses = data.reduce(
+    (a, status) => ({ ...a, [status._id]: [...status.docs] }),
+    {}
+  );
+  console.log(statuses);
+  console.log(status);
   return (
     <DashboardStyles>
       <nav>
         <NavLink exact to={`/dashboard/inProgress`}>
           <p>
-            In Progress <span className="count">{data.inProgress?.length}</span>
+            In Progress{' '}
+            <span className="count">{statuses.inProgress?.length}</span>
           </p>
         </NavLink>
-        <NavLink to={`/dashboard/waitingForParts`}>
+        <NavLink to={`/dashboard/waitingOnParts`}>
           <p>
-            Waiting for parts <span className="count">0</span>
+            Waiting on parts{' '}
+            <span className="count">{statuses.waitingOnParts?.length}</span>
           </p>
         </NavLink>
 
-        <NavLink to={`/dashboard/readyToShip`}>
+        <NavLink to={`/dashboard/readyToBuild`}>
           <p>
-            Ready to be Shipped{' '}
-            <span className="count">{data.readyToShip?.length || 0}</span>
+            Ready to build{' '}
+            <span className="count">{statuses.readyToBuild?.length}</span>
           </p>
         </NavLink>
-        <NavLink to={`/dashboard/notRecived`}>
+        <NavLink to={`/dashboard/readyToShip`}>
           <p>
-            Not Recived{' '}
-            <span className="count">{data.notRecived?.length || 0}</span>
+            Ready to Ship{' '}
+            <span className="count">{statuses.readyToShip?.length}</span>
+          </p>
+        </NavLink>
+        <NavLink to={`/dashboard/waitingForPayment`}>
+          <p>
+            Waiting on payment{' '}
+            <span className="count">{statuses.waitingForPayment?.length}</span>
           </p>
         </NavLink>
       </nav>
-      <WorkOrderList orders={data[status]} setRefetch={setRefetch} />
+      <WorkOrderList orders={statuses[status]} setRefetch={setRefetch} />
     </DashboardStyles>
   );
 };

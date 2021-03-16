@@ -1,17 +1,23 @@
 const express = require('express');
 const cors = require('cors');
+
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo').default;
 
 const routes = require('./routes/index');
+const WorkOrder = require('./models/WorkOrder');
 
 require('dotenv').config();
 
-const app = express();
 const port = process.env.PORT || 5000;
-
 const uri = process.env.DB_URL;
 mongoose.connect(uri, {
   useUnifiedTopology: true,
@@ -40,8 +46,15 @@ app.use(
     store: MongoStore.create({ mongoUrl: uri }),
   })
 );
-
+io.on('connection', function (socket) {
+  console.log('A user connected');
+  WorkOrder.watch().on('change', (data) => socket.emit('Hello'));
+  // Whenever someone disconnects this piece of code executed
+  socket.on('disconnect', function () {
+    console.log('A user disconnected');
+  });
+});
 app.use('/', routes);
-app.listen(port, () => {
+http.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
