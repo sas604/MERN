@@ -32,5 +32,10 @@ router.get(
   appControler.checkCredentials,
   appControler.getWorkOrders
 );
+router.get(
+  '/api/getWorkOrder/:orderId',
+  appControler.checkCredentials,
+  appControler.getWorkOrder
+);
 
 module.exports = router;

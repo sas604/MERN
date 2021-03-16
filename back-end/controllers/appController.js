@@ -120,7 +120,7 @@ exports.createCustomer = async (req, res) => {
     res.status(200).json('Succesfuly created customer ');
   } catch (e) {
     console.log(e);
-    res.status(400).jason(e);
+    res.status(400).json(e);
   }
 };
 
@@ -216,5 +216,14 @@ exports.getWorkOrders = async (req, res) => {
   } catch (e) {
     console.error(e);
     res.json(e);
+  }
+};
+
+exports.getWorkOrder = async (req, res) => {
+  try {
+    const order = await WorkOrder.findById(req.params.orderId).exec();
+    res.json(order);
+  } catch (e) {
+    res.status(400).json(e);
   }
 };
