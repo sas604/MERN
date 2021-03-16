@@ -40,7 +40,7 @@ const WorkOrdersDashboard = () => {
   console.log(location.key);
   //get all working orders from db
   const { status } = useParams();
-  const { path, url } = useRouteMatch();
+
   const urlGet = `http://localhost:5000/api/getWorkOrders`;
   const [refetch, setRefetch] = useState(false);
   const options = {
@@ -51,21 +51,18 @@ const WorkOrdersDashboard = () => {
   useEffect(() => {
     console.log('1');
     const socket = io('http://localhost:5000');
-    socket.on('connect', () => {
-      console.log('socet conected');
-    });
+
+    // socket.on('connect', () => {});
     socket.on('Hello', () => setRefetch((s) => !s));
     return () => socket.disconnect();
   }, []);
 
-  if (pendingFetch) return <h2>Loading...</h2>;
   if (!data) return <h3>No orders</h3>;
   const statuses = data.reduce(
     (a, status) => ({ ...a, [status._id]: [...status.docs] }),
     {}
   );
-  console.log(statuses);
-  console.log(status);
+
   return (
     <DashboardStyles>
       <nav>
@@ -101,7 +98,7 @@ const WorkOrdersDashboard = () => {
           </p>
         </NavLink>
       </nav>
-      <WorkOrderList orders={statuses[status]} setRefetch={setRefetch} />
+      <WorkOrderList orders={statuses[status]} />
     </DashboardStyles>
   );
 };

@@ -196,11 +196,6 @@ exports.getWorkOrders = async (req, res) => {
         },
       },
       {
-        $sort: {
-          createdAt: -1,
-        },
-      },
-      {
         $group: {
           _id: '$status',
           docs: { $addToSet: '$$ROOT' },
@@ -233,3 +228,22 @@ exports.updateWorkOrder = async (req, res) => {
     res.status(400).json(e);
   }
 };
+exports.updateStatusWithMail = async (req, res) => {
+  console.log(req.body);
+  try {
+    const order = await WorkOrder.findOne(
+      { _id: req.body.order },
+      {
+        services: {
+          $elemMatch: { _id: new mongoose.Types.ObjectId(req.body.service) },
+        },
+      }
+    ).populate('customer');
+    order.services[0].done = true;
+    order.save();
+    res.status(200).json('success');
+  } catch (e) {
+    res.status(400).json(e);
+  }
+};
+// new mongoose.Types.ObjectId(req.body.service)

@@ -2,13 +2,16 @@ import styled from 'styled-components';
 import { MdExpandMore, MdExpandLess } from 'react-icons/md';
 import { useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 const OrderStyles = styled.div`
   margin: 1rem 0;
   background-color: white;
   box-shadow: 0px 10px 13px -7px #0000002e;
   padding: 0.5rem;
   flex-wrap: wrap;
+  animation: in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+
   li {
     list-style: none;
   }
@@ -110,15 +113,21 @@ const OrderStyles = styled.div`
       flex: 10%;
     }
   }
+  @keyframes in {
+    from {
+      transform: translateY(-100px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 `;
-
 const ClorSpan = styled.span`
   flex: 1;
   background-color: ${(props) => props.color};
 `;
 
-const Order = ({ order }) => {
-  const { url } = useRouteMatch();
+const Order = ({ order, startUpdate }) => {
   const updateStatus = (id) => async (e) => {
     const postUrl = `http://localhost:5000/api/updateWorkOrder`;
     const options = {
@@ -162,7 +171,12 @@ const Order = ({ order }) => {
           {order?.services.map((ser) => (
             <li key={ser._id} className={`${ser.done ? '' : 'notdone'}`}>
               <label className="capital">
-                <input type="checkbox" checked={ser.done} readOnly />
+                <input
+                  type="checkbox"
+                  onChange={() => startUpdate(ser._id, order._id)}
+                  checked={ser.done}
+                  readOnly
+                />
                 {ser.serviceTag}
               </label>
             </li>

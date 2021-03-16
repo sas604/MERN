@@ -39,5 +39,8 @@ const workOrderSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+workOrderSchema.index({
+  status: 'text',
+});
 
 module.exports = mongoose.model('WorkOrder', workOrderSchema);

@@ -11,7 +11,7 @@ import CustomerInfo from './CustomerInfo';
 import { Link } from 'react-router-dom';
 import CreateJob from './CreateJob';
 import WorkOrderList from './WorkOrdersList';
-import Portal from './Portal';
+
 import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 
 // customer component
@@ -61,6 +61,4 @@ const Customer = () => {
 export default Customer;
 
 // modal example
-/* <Portal id="modal">
-              <h1>Shinny New portal</h1>
-            </Portal> */
+/*  */
