@@ -7,6 +7,7 @@ import Customer from './components/Customer';
 import WorkOrdersDashboard from './components/WorkOrdersDashboard';
 import Layout from './components/Layout';
 import Nav from './components/Nav';
+import UpdateOrder from './components/UpdateOrder';
 
 function App() {
   return (
@@ -57,6 +58,11 @@ function App() {
           <Switch>
             <Route path="/dashboard/:status">
               <WorkOrdersDashboard />
+            </Route>
+          </Switch>
+          <Switch>
+            <Route path="/:orderId/edit">
+              <UpdateOrder />
             </Route>
           </Switch>
         </div>

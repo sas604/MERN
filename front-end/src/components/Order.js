@@ -3,7 +3,8 @@ import { MdPhotoCamera, MdExpandMore, MdExpandLess } from 'react-icons/md';
 import { useReducer, useState } from 'react';
 import OrderInfo from './OrderInfo';
 import { reducer, initialState } from '../utils/jobReducer';
-
+import { FaPencilAlt } from 'react-icons/fa';
+import { Link, useRouteMatch } from 'react-router-dom';
 const OrderStyles = styled.div`
   margin: 1rem 0;
   background-color: white;
@@ -89,6 +90,15 @@ const OrderStyles = styled.div`
   }
   .details {
     padding: 1rem;
+    position: relative;
+  }
+
+  .edit {
+    position: absolute;
+    color: var(--red);
+    left: 11rem;
+    top: 2rem;
+    font-size: 1.3rem;
   }
   .details-info,
   .service-info__item {
@@ -112,11 +122,8 @@ const ClorSpan = styled.span`
   background-color: ${(props) => props.color};
 `;
 
-const Order = ({ order, setModal, onService }) => {
-  const updateField = (field) => (e) => {
-    dispatch({ type: 'updateValue', field, value: e.target.value });
-  };
-  const [state, dispatch] = useReducer(reducer, order);
+const Order = ({ order }) => {
+  const { url } = useRouteMatch();
   const [more, setMore] = useState(false);
   return (
     <OrderStyles>
@@ -148,6 +155,9 @@ const Order = ({ order, setModal, onService }) => {
       </div>
       <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>
+        <Link className="edit" to={`/${order._id}/edit`}>
+          <FaPencilAlt />
+        </Link>
         <div className="details-info">
           <p>
             <span className="desc">Year</span>

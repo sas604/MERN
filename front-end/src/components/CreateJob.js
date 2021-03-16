@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 import { reducer, initialState } from '../utils/jobReducer';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import OrderInfo from './OrderInfo';
 
 const CreateJob = ({ customer }) => {

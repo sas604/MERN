@@ -33,7 +33,6 @@ const WorkOrdersDashboard = () => {
   const { status } = useParams();
   const { path, url } = useRouteMatch();
   const urlGet = `http://localhost:5000/api/getWorkOrders`;
-
   const [refetch, setRefetch] = useState(false);
   const options = {
     credentials: 'include',
