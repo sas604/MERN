@@ -37,5 +37,10 @@ router.get(
   appControler.checkCredentials,
   appControler.getWorkOrder
 );
+router.post(
+  '/api/updateWorkOrder',
+  appControler.checkCredentials,
+  appControler.updateWorkOrder
+);
 
 module.exports = router;

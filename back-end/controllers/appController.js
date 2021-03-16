@@ -227,3 +227,11 @@ exports.getWorkOrder = async (req, res) => {
     res.status(400).json(e);
   }
 };
+exports.updateWorkOrder = async (req, res) => {
+  try {
+    const order = await WorkOrder.findByIdAndUpdate(req.body._id, req.body);
+    res.status(200).json('success');
+  } catch (e) {
+    res.status(400).json(e);
+  }
+};
