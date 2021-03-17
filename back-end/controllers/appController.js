@@ -111,7 +111,7 @@ exports.createCustomer = async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(req.body.cx),
+      body: JSON.stringify(req.body),
     });
     const cx = JSON.parse(response.body);
     // TODO check what info they store on customers

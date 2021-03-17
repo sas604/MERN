@@ -1,4 +1,6 @@
-const initialState = {
+import set from 'lodash/set';
+
+export const initialState = {
   FullyQualifiedName: '',
   FamilyName: '',
   GivenName: '',
@@ -29,7 +31,19 @@ const initialState = {
     Line2: '',
     Country: '',
   },
-  Id: '',
 };
 
-export default initialState;
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case 'updateValue':
+      return { ...set(state, action.field, action.value) };
+    case 'sameAs':
+      return { ...state, ShipAddr: { ...state.BillAddr } };
+    case 'load':
+      return {
+        ...action.data,
+      };
+    default:
+      return;
+  }
+};
