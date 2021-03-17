@@ -76,14 +76,25 @@ fieldset{
     color: var(--red);
   }
 
-#modal{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100vh;
-  min-height:100vh;
-  z-index:999;
-  background-color:black;
+  #modal{
+  position: fixed;
+  
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 999;
+  background-color: #000000bf;
+  >div{
+    grid-template-rows: 100vh;
+    grid-template-columns: 100vw;
+    justify-items:center;
+    align-items:center;
+   display:grid;
+  }
+}
+.modal-open{
+  overflow:hidden;
 }
 
 .max-width{

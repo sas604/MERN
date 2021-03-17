@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import ModalContentStyle from '../css/ModalStyles';
 import Order from './Order';
 import Portal from './Portal';
 
@@ -15,6 +16,7 @@ const WorkOrderList = ({ orders }) => {
   const [updateData, setUpdateData] = useState({});
 
   const startUpdate = (serviceId, orderId) => {
+    document.body.classList.add('modal-open');
     setUpdateData({ service: serviceId, order: orderId });
     setModal(true);
   };
@@ -31,6 +33,8 @@ const WorkOrderList = ({ orders }) => {
       if (!res.ok) {
         throw Error('Cant Update Order');
       } else {
+        setModal(false);
+        document.body.classList.remove('modal-open');
         console.log('success');
       }
     } catch (e) {
@@ -48,23 +52,28 @@ const WorkOrderList = ({ orders }) => {
     <WorkStyles>
       {modal && (
         <Portal id="modal">
-          <div style={{ backgroundColor: 'white' }}>
+          <ModalContentStyle>
             <p className="promt">Confirm Service Complition</p>
             <button
               type="button"
               className="button"
-              onClick={() => update(updateData)}
+              onClick={() => {
+                update(updateData);
+              }}
             >
               Confirm
             </button>
             <button
               type="button"
-              onClick={() => setModal(false)}
+              onClick={() => {
+                document.body.classList.remove('modal-open');
+                setModal(false);
+              }}
               className="button button--red"
             >
               Cancel
             </button>
-          </div>
+          </ModalContentStyle>
         </Portal>
       )}
       <ul>
