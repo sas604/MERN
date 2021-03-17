@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const workOrderSchema = mongoose.Schema(
   {
@@ -7,7 +8,6 @@ const workOrderSchema = mongoose.Schema(
       ref: 'Customer',
       required: 'You mast supply a Customer!',
     },
-    invoice: String,
     year: Number,
     make: String,
     model: String,
@@ -42,5 +42,5 @@ const workOrderSchema = mongoose.Schema(
 workOrderSchema.index({
   status: 'text',
 });
-
+workOrderSchema.plugin(AutoIncrement, { inc_field: 'invoice' });
 module.exports = mongoose.model('WorkOrder', workOrderSchema);

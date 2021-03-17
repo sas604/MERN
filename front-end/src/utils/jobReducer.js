@@ -12,7 +12,6 @@ export const initialState = {
   recived: '',
   shiping: '',
   services: [],
-  invoice: '',
   status: 'inProgress',
 };
 
