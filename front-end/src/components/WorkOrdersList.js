@@ -77,9 +77,11 @@ const WorkOrderList = ({ orders }) => {
         </Portal>
       )}
       <ul>
-        {orders.map((order, i) => (
-          <Order order={order} key={i} startUpdate={startUpdate} />
-        ))}
+        {orders
+          .sort((a, b) => b.invoice - a.invoice)
+          .map((order, i) => (
+            <Order order={order} key={i} startUpdate={startUpdate} />
+          ))}
       </ul>
     </WorkStyles>
   );

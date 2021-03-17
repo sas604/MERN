@@ -62,7 +62,7 @@ const OrderStyles = styled.div`
       border: 2px solid #555;
     }
     input[type='checkbox']:checked {
-      background: #abd;
+      background: var(--blue);
     }
   }
   && button {
@@ -162,7 +162,7 @@ const Order = ({ order, startUpdate }) => {
             <ClorSpan key={`${i}-${c}`} color={c}></ClorSpan>
           ))}
         </div>
-        <p className="invoice">#4567783</p>
+        <p className="invoice">#{order.invoice}</p>
 
         <p>
           {order.make} {order.model} {order.year}
