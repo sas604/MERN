@@ -232,19 +232,28 @@ exports.updateStatusWithMail = async (req, res) => {
     const order = await WorkOrder.findOne(
       { _id: req.body.order },
       {
+        invoice: 1,
         services: {
           $elemMatch: { _id: new mongoose.Types.ObjectId(req.body.service) },
         },
       }
     ).populate('customer');
+    console.log(order);
     order.services[0].done = true;
 
-    send(order.customer);
-    order.save(order.customer);
+    const options = {
+      name: order.customer.DisplayName,
+      address: order.customer.PrimaryEmailAddr.Address,
+      number: order.invoice,
+    };
+
+    send(options);
+    order.save();
 
     //
     res.status(200).json('success');
   } catch (e) {
+    console.log(e);
     res.status(400).json(e);
   }
 };

@@ -70,6 +70,7 @@ table td {
 .header {
   background-color: #1b1c1f;
   padding: 20px;
+  margin-bottom: 16px;
 }
 .wrapper {
   box-sizing: border-box;
@@ -112,7 +113,9 @@ h1 {
   text-align: center;
   text-transform: capitalize;
 }
-
+h2 {
+  margin-top: 30px;
+}
 p,
 ul,
 ol {
