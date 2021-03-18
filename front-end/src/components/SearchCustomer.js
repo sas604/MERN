@@ -121,7 +121,6 @@ const SearchCustomer = () => {
         onSubmit={(e) => {
           //TODO prevent to redirect if no customer selected
           e.preventDefault();
-          history.push(`/customer/${values.search}`);
         }}
       >
         {values.search && (

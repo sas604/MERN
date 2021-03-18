@@ -36,6 +36,7 @@ h2{
  margin-top:2rem;
  margin-bottom:1rem;
 }
+
 fieldset{
   margin-top :1rem;
 }
@@ -72,6 +73,12 @@ fieldset{
     display:block;
     width:100%
   }
+  .button--block{
+
+    display:block;
+    width:100%;
+  }
+  
   .warning{
     color: var(--red);
   }

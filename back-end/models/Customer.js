@@ -105,7 +105,7 @@ const customerSchema = mongoose.Schema({
 customerSchema.index({
   DisplayName: 'text',
   CompanyName: 'text',
-  FreeFormNumber: 'text',
+  'PrimaryPhone.FreeFormNumber': 'text',
   FamilyName: 'text',
   GivenName: 'text',
 });

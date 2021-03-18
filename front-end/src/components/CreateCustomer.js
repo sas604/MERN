@@ -1,10 +1,12 @@
 import { useReducer, useState } from 'react';
 import CustomerForm from './CustomerForm';
 import { initialState, reducer } from '../utils/customerReducer';
+import { useHistory } from 'react-router';
 
 const CreateCustomer = () => {
   const [status, setStatus] = useState('idle');
   const [values, dispatch] = useReducer(reducer, initialState);
+  const history = useHistory();
 
   const updateValue = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
@@ -30,6 +32,7 @@ const CreateCustomer = () => {
           'Something went wrong while creating new customer. Make sure that cx name is unique'
         );
       }
+      history.replace(`customer/${values.DisplayName}`);
 
       setStatus({ status: 'success', msg });
     } catch (e) {
@@ -46,7 +49,20 @@ const CreateCustomer = () => {
           dispatch={dispatch}
           updateValue={updateValue}
         />
-        <button>Submit</button>
+        <button
+          style={{ marginBottom: 16 }}
+          type="submit"
+          className="button button--blue button--block"
+        >
+          Update
+        </button>
+        <button
+          className="button button--red button--block"
+          type="button"
+          onClick={() => history.goBack()}
+        >
+          Cancel
+        </button>
       </form>
     </>
   );

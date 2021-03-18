@@ -34,6 +34,20 @@ const CustomerInfo = ({ cx }) => {
         dispatch={dispatch}
         updateValue={updateValue}
       />
+      <button
+        style={{ marginBottom: 16 }}
+        type="submit"
+        className="button button--blue button--block"
+      >
+        Update
+      </button>
+      <button
+        className="button button--red button--block"
+        type="button"
+        onClick={() => history.goBack()}
+      >
+        Cancel
+      </button>
     </form>
   );
 };

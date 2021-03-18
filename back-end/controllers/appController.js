@@ -1,10 +1,10 @@
-const QuickBooks = require('node-quickbooks');
 const OAuthClient = require('intuit-oauth');
 require('dotenv').config();
 const querystring = require('querystring');
 const mongoose = require('mongoose');
 const Customer = require('../models/Customer');
 const WorkOrder = require('../models/WorkOrder');
+const { send } = require('../mail/mail');
 
 // TODO make dynamic
 const companyID = '4620816365161933290';
@@ -94,7 +94,7 @@ exports.search = async (req, res) => {
   const regex = new RegExp(escapeRegex(req.body.query), 'gi');
   try {
     const Customers = await Customer.find({
-      DisplayName: { $regex: regex },
+      $text: { $search: req.body.query },
     }).limit(10);
     res.json(Customers);
   } catch (e) {
@@ -114,7 +114,6 @@ exports.createCustomer = async (req, res) => {
       body: JSON.stringify(req.body),
     });
     const cx = JSON.parse(response.body);
-    // TODO check what info they store on customers
     const newCX = await new Customer(cx.Customer).save(); // store new CX in the DB
     // send customer Dispaly name and redirect to Customer page
     res.status(200).json('Succesfuly created customer ');
@@ -229,7 +228,6 @@ exports.updateWorkOrder = async (req, res) => {
   }
 };
 exports.updateStatusWithMail = async (req, res) => {
-  console.log(req.body);
   try {
     const order = await WorkOrder.findOne(
       { _id: req.body.order },
@@ -240,7 +238,11 @@ exports.updateStatusWithMail = async (req, res) => {
       }
     ).populate('customer');
     order.services[0].done = true;
-    order.save();
+
+    send(order.customer);
+    order.save(order.customer);
+
+    //
     res.status(200).json('success');
   } catch (e) {
     res.status(400).json(e);

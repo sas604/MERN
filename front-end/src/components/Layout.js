@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdArrowForward } from 'react-icons/md';
+import { useLocation, useRouteMatch } from 'react-router';
 
 const LayoutStyle = styled.div`
   display: grid;
@@ -48,6 +49,12 @@ const LayoutStyle = styled.div`
 
 const Layout = ({ sidebar, children }) => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    if (open) {
+      setOpen(false);
+    }
+  }, [location.key]);
 
   return (
     <>

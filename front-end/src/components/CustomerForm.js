@@ -4,6 +4,7 @@ import states from '../utils/states';
 const CustomerStyles = styled.div`
   background-color: var(--white);
   display: flex;
+  margin-bottom: 1rem;
   label {
     display: flex;
     flex-direction: column;
