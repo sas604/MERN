@@ -8,62 +8,50 @@ import WorkOrdersDashboard from './components/WorkOrdersDashboard';
 import Layout from './components/Layout';
 import Nav from './components/Nav';
 import UpdateOrder from './components/UpdateOrder';
+import Login from './components/Login';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
     <Router>
       <Layout sidebar={<Nav />}>
         <div className="App">
-          {/* <button
-            onClick={() =>
-              fetch('http://localhost:5000/api/login')
-                .then((response) => response.json())
-                .then((res) => (window.location = res))
-            }
-          >
-            log to quickbooks
-          </button>*/}
-          {/* <button
-            onClick={() =>
-              fetch('http://localhost:5000/api/getusers', {
-                credentials: 'include',
-              })
-                .then((response) => response.json())
-                .then((res) => console.log(res))
-            }
-          >
-            users
-          </button> */}
+          {/**/}
 
           <Switch>
-            <Route exact path="/">
+            <PrivateRoute exact path="/">
               <SearchCustomer />
+            </PrivateRoute>
+          </Switch>
+          <Switch>
+            <Route exact path="/login">
+              <Login />
             </Route>
           </Switch>
           <Switch>
-            <Route path="/createjob">
+            <PrivateRoute path="/createjob">
               <CreateJob />
-            </Route>
+            </PrivateRoute>
           </Switch>
           <Switch>
-            <Route path="/CreateCustomer">
+            <PrivateRoute path="/CreateCustomer">
               <CreateCustomer />;
-            </Route>
+            </PrivateRoute>
           </Switch>
           <Switch>
-            <Route path="/customer/:name">
+            <PrivateRoute path="/customer/:name">
               <Customer />
-            </Route>
+            </PrivateRoute>
           </Switch>
           <Switch>
-            <Route path="/dashboard/:status">
+            <PrivateRoute path="/dashboard/:status">
               <WorkOrdersDashboard />
-            </Route>
+            </PrivateRoute>
           </Switch>
           <Switch>
-            <Route path="/:orderId/edit">
+            <PrivateRoute path="/:orderId/edit">
               <UpdateOrder />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </div>
       </Layout>

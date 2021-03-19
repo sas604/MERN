@@ -8,10 +8,6 @@ const userSchema = mongoose.Schema(
       unique: true,
       trim: true,
     },
-    qBookCredentials: {
-      accesToken: String,
-      refreshToken: String,
-    },
   },
   { timestamps: true }
 );

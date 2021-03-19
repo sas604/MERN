@@ -15,6 +15,14 @@ const oauthClient = new OAuthClient({
   redirectUri: 'http://localhost:5000/api/callback',
 });
 
+exports.user = (req, res) => {
+  if (!req.session.user) res.status(403).json(null);
+  if (req.session.user?.realmId !== '4620816365161933290') {
+    res.status(403).json(null);
+  }
+  res.json('user');
+};
+
 exports.login = (req, res) => {
   const authUri = oauthClient.authorizeUri({
     scope: [OAuthClient.scopes.Accounting, OAuthClient.scopes.OpenId],
@@ -30,22 +38,18 @@ exports.callback = async (req, res) => {
     req.session.user = {
       accesToken: token.json.access_token,
       refreshToken: token.json.refresh_token,
+      realmId: token.token.realmId,
     };
   } catch (error) {
     console.error(error);
   }
-
   res.redirect('http://localhost:3000/');
 };
 
 exports.checkCredentials = async (req, res, next) => {
   // check the is token exist
-  if (!req.session.user) {
-    // TODO try to fix this
-    console.log('no user');
-    res.status(403).json({ error: 'Acces Denied first block' }); // if no user acces denied function returns you need to log in again.
-    return;
-  }
+  console.log(req.session.user.realmId);
+
   if (!oauthClient.isAccessTokenValid(req.session.user.accesToken)) {
     // if token is invalid try to refresh it if success procide
     try {
@@ -58,7 +62,7 @@ exports.checkCredentials = async (req, res, next) => {
       next();
     } catch (error) {
       console.log('reffresh error');
-      res.status(403).json({ error }); // if no user acces denied function returns you need to log in again.
+      res.status(403).redirect('/login'); // if no user acces denied function returns you need to log in again.
     }
   } else {
     // the token is valid you can make an API call
