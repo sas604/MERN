@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { MdExpandMore, MdExpandLess } from 'react-icons/md';
+import { MdExpandMore, MdExpandLess, MdCheck } from 'react-icons/md';
 import { useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { GrCheckboxSelected, GrCheckbox } from 'react-icons/gr';
 
 const OrderStyles = styled.div`
   margin: 1rem 0;
@@ -48,21 +49,21 @@ const OrderStyles = styled.div`
       font-size: 1.3rem;
       margin: 0;
     }
+    span {
+      text-align: center;
+      display: block;
+    }
     label {
       display: flex;
       align-items: center;
     }
-    input[type='checkbox'] {
-      margin-right: 0.5rem;
-      -webkit-appearance: none;
-      width: 30px;
-      height: 30px;
-      background: white;
-      border-radius: 5px;
-      border: 2px solid #555;
+    button {
+      background-color: transparent;
+      border: 1px solid var(--black);
+      color: white;
     }
-    input[type='checkbox']:checked {
-      background: var(--blue);
+    button.checked {
+      background-color: var(--black);
     }
   }
   && button {
@@ -169,16 +170,16 @@ const Order = ({ order, startUpdate }) => {
         </p>
         <ul className="order-list">
           {order?.services.map((ser) => (
-            <li key={ser._id} className={`${ser.done ? '' : 'notdone'}`}>
-              <label className="capital">
-                <input
-                  type="checkbox"
-                  onChange={() => startUpdate(ser._id, order._id)}
-                  checked={ser.done}
-                  readOnly
-                />
+            <li key={ser._id}>
+              <span className="capital">
+                <button
+                  className={`checkBox  button ${ser.done ? 'checked' : ''} `}
+                  onClick={() => startUpdate(ser._id, order._id)}
+                >
+                  <MdCheck />
+                </button>
                 {ser.serviceTag}
-              </label>
+              </span>
             </li>
           ))}
         </ul>

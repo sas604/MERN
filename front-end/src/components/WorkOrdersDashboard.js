@@ -15,20 +15,22 @@ import { io } from 'socket.io-client';
 const DashboardStyles = styled.div`
   nav {
     display: flex;
-    gap: 1rem;
-    margin: 1rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
   }
   p {
     margin: 0;
   }
-  nav > a {
+  a {
     border-radius: 2px;
     background-color: lightgrey;
-    padding: 1rem;
+    padding: 0.5rem;
     text-decoration: none;
     color: black;
     font-weight: 700;
+    margin: 0.2rem 0.5rem;
   }
+
   .active {
     background-color: red;
     color: white;
