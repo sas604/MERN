@@ -3,7 +3,6 @@ import { MdExpandMore, MdExpandLess, MdCheck } from 'react-icons/md';
 import { useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { GrCheckboxSelected, GrCheckbox } from 'react-icons/gr';
 
 const OrderStyles = styled.div`
   margin: 1rem 0;
@@ -31,9 +30,11 @@ const OrderStyles = styled.div`
   }
   .color {
     flex: 0 0 3rem;
-    align-self: stretch;
+    align-self: center;
     justify-content: center;
     display: flex;
+    min-height: 30px;
+    max-height: 70px;
   }
   .invoice {
     flex: 1;
@@ -57,18 +58,18 @@ const OrderStyles = styled.div`
       display: flex;
       align-items: center;
     }
-    button {
+    .checkBox {
+      padding: 0;
       background-color: transparent;
       border: 1px solid var(--black);
       color: white;
     }
-    button.checked {
+    .checkBox.checked {
       background-color: var(--black);
     }
   }
   && button {
     cursor: pointer;
-    padding: 0;
     flex: 0 10px;
     display: flex;
     align-self: stretch;
@@ -79,6 +80,7 @@ const OrderStyles = styled.div`
     }
   }
   .expand {
+    padding: 0;
     background-color: transparent;
     -webkit-appearance: none;
     outline: none;
@@ -99,19 +101,37 @@ const OrderStyles = styled.div`
     left: 11rem;
     top: 2rem;
     font-size: 1.3rem;
+    background-color: transparent;
   }
   .details-info,
   .service-info__item {
     display: flex;
     margin-top: 1rem;
-    & :not(:first-child) {
-      margin-left: 3rem;
+    p:not(:first-child) {
+      margin-left: 1rem;
     }
     p {
       flex: 75%;
     }
     p:first-of-type {
       flex: 10%;
+    }
+  }
+  @media (max-width: 650px) {
+    .work-order-min {
+      flex-wrap: wrap;
+    }
+    .order-list {
+      order: 3;
+      flex: 50%;
+      align-self: center;
+    }
+    .details-info {
+      flex-wrap: wrap;
+    }
+    && .details-info p {
+      flex: 1;
+      margin: 0.5rem;
     }
   }
   @keyframes in {
@@ -137,10 +157,11 @@ const Order = ({ order, startUpdate }) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         _id: id,
-        status: e.target.value,
+        status: e?.target.value || 'shipped',
       }),
     };
     try {
+      console.log(options);
       const res = await fetch(postUrl, options);
       if (!res.ok) {
         throw Error('Cant Update Order');
@@ -169,34 +190,50 @@ const Order = ({ order, startUpdate }) => {
           {order.make} {order.model} {order.year}
         </p>
         <ul className="order-list">
-          {order?.services.map((ser) => (
-            <li key={ser._id}>
-              <span className="capital">
-                <button
-                  className={`checkBox  button ${ser.done ? 'checked' : ''} `}
-                  onClick={() => startUpdate(ser._id, order._id)}
-                >
-                  <MdCheck />
-                </button>
-                {ser.serviceTag}
-              </span>
+          {order.status === 'readyToShip' ? (
+            <li>
+              <button
+                className="button"
+                onClick={updateStatus(order._id)}
+                type="button"
+              >
+                Marks as shipped
+              </button>
             </li>
-          ))}
+          ) : (
+            order.services.map((ser) => (
+              <li key={ser._id}>
+                <span className="capital">
+                  <button
+                    className={`checkBox  button ${ser.done ? 'checked' : ''} `}
+                    onClick={() => startUpdate(ser._id, order._id)}
+                  >
+                    <MdCheck />
+                  </button>
+                  {ser.serviceTag}
+                </span>
+              </li>
+            ))
+          )}
         </ul>
-        <label htmlFor="status">
-          Status
-          <select
-            name="status"
-            onChange={updateStatus(order._id)}
-            value={order.status}
-          >
-            <option value="inProgress">In progress </option>
-            <option value="waitingOnParts">Waiting on parts </option>
-            <option value="readyToBuild">Ready to build </option>
-            <option value="readyToShip">Ready to ship</option>
-            <option value="waitingForPayment">Waiting for payment</option>
-          </select>
-        </label>
+        {order.status === 'shipped' ? (
+          <span className="button button--red">Shipped</span>
+        ) : (
+          <label htmlFor="status">
+            Status
+            <select
+              name="status"
+              onChange={updateStatus(order._id)}
+              value={order.status}
+            >
+              <option value="inProgress">In progress </option>
+              <option value="waitingOnParts">Waiting on parts </option>
+              <option value="readyToBuild">Ready to build </option>
+              <option value="readyToShip">Ready to ship</option>
+              <option value="waitingForPayment">Waiting for payment</option>
+            </select>
+          </label>
+        )}
       </div>
       <div className={`details${more ? '' : ' hide'}`}>
         <h4>Work order details</h4>

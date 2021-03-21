@@ -59,6 +59,7 @@ fieldset{
     text-align: center;
     font-size: 1.3rem;
     transition: all cubic-bezier(0.39, 0.575, 0.565, 1) 0.2s;
+    cursor: pointer;
     &:hover {
       transform: scale(1.01);
     }

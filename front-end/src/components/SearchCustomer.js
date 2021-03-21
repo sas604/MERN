@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useForm from '../hooks/useForm';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 
@@ -84,7 +84,6 @@ const SearchCustomer = () => {
   const [values, updateValue, reset] = useForm({
     search: '',
   });
-  const history = useHistory();
   useEffect(() => {
     if (!values.search) {
       setSearchResults([]);
@@ -119,7 +118,6 @@ const SearchCustomer = () => {
       <h2>Search for cusomer</h2>
       <form
         onSubmit={(e) => {
-          //TODO prevent to redirect if no customer selected
           e.preventDefault();
         }}
       >
@@ -136,7 +134,7 @@ const SearchCustomer = () => {
           </button>
         )}
         <label htmlFor="Search">
-          <span>Type name:</span>
+          <span>Type a name:</span>
           <input
             list="names"
             id="search"

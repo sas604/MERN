@@ -40,7 +40,7 @@ const CreateCustomer = () => {
     }
   };
   return (
-    <>
+    <div className="max-width">
       {status !== 'idle' && <h6>{status.msg}</h6>}
       <h2>Create a new customer</h2>
       <form onSubmit={createCx}>
@@ -64,7 +64,7 @@ const CreateCustomer = () => {
           Cancel
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

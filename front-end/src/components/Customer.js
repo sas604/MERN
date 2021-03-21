@@ -59,6 +59,3 @@ const Customer = () => {
 };
 
 export default Customer;
-
-// modal example
-/*  */
