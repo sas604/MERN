@@ -1,16 +1,20 @@
-import { useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import { useParams, useRouteMatch, useHistory } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import OrderInfo from './OrderInfo';
 import { reducer, initialState } from '../utils/jobReducer';
+import { ToastContext } from './Toast';
 
 const UpdateOrder = () => {
+  const { setMessage } = useContext(ToastContext);
   const { orderId } = useParams();
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
   // get the  order
 
-  const urlGet = `http://localhost:5000/api/getWorkOrder/${orderId}`;
+  const urlGet = `http://${
+    process.env.REACT_APP_DOMAIN || 'localhost:5000'
+  }/api/getWorkOrder/${orderId}`;
   const updateField = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
@@ -20,7 +24,9 @@ const UpdateOrder = () => {
   useEffect(() => dispatch({ type: 'setOrder', data }), [data]);
 
   const updateWorkOrder = async () => {
-    const postUrl = `http://localhost:5000/api/updateWorkOrder`;
+    const postUrl = `http://${
+      process.env.REACT_APP_DOMAIN || 'localhost:5000'
+    }/api/updateWorkOrder`;
     const options = {
       credentials: 'include',
       method: 'POST',
@@ -29,13 +35,15 @@ const UpdateOrder = () => {
     };
     try {
       const res = await fetch(postUrl, options);
+      const message = await res.json();
       if (!res.ok) {
-        throw Error('Cant Update Order');
+        throw Error(message);
       } else {
+        setMessage(['success', message]);
         history.goBack();
       }
     } catch (e) {
-      console.log(e);
+      setMessage(['error', e.message]);
     }
   };
   if (pendingFetch || !data?._id) return <h1>Loading...</h1>;

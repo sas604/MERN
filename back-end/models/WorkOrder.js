@@ -42,5 +42,8 @@ const workOrderSchema = mongoose.Schema(
 workOrderSchema.index({
   status: 'text',
 });
+workOrderSchema.index({
+  services: 1,
+});
 workOrderSchema.plugin(AutoIncrement, { inc_field: 'invoice' });
 module.exports = mongoose.model('WorkOrder', workOrderSchema);

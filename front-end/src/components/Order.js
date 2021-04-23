@@ -10,7 +10,7 @@ const OrderStyles = styled.div`
   box-shadow: 0px 10px 13px -7px #0000002e;
   padding: 0.5rem;
   flex-wrap: wrap;
-  animation: in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+  /* animation: in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1); */
 
   li {
     list-style: none;
@@ -117,6 +117,13 @@ const OrderStyles = styled.div`
       flex: 10%;
     }
   }
+  .name-link {
+    background-color: transparent;
+    font-weight: normal;
+    color: var(--blue);
+    padding: 0;
+    margin: 0;
+  }
   @media (max-width: 650px) {
     .work-order-min {
       flex-wrap: wrap;
@@ -150,7 +157,9 @@ const ClorSpan = styled.span`
 
 const Order = ({ order, startUpdate }) => {
   const updateStatus = (id) => async (e) => {
-    const postUrl = `http://localhost:5000/api/updateWorkOrder`;
+    const postUrl = `http://${
+      process.env.REACT_APP_DOMAIN || 'localhost:5000'
+    }/api/updateWorkOrder`;
     const options = {
       credentials: 'include',
       method: 'POST',
@@ -229,6 +238,7 @@ const Order = ({ order, startUpdate }) => {
               <option value="inProgress">In progress </option>
               <option value="waitingOnParts">Waiting on parts </option>
               <option value="readyToBuild">Ready to build </option>
+              <option value="built">Built</option>
               <option value="readyToShip">Ready to ship</option>
               <option value="waitingForPayment">Waiting for payment</option>
             </select>
@@ -242,10 +252,16 @@ const Order = ({ order, startUpdate }) => {
         </Link>
         <div className="details-info">
           {
-            <p>
-              <span className="desc">Name</span>
-              {order.customer.DisplayName}
-            </p>
+            <Link
+              className="name-link"
+              to={`/customer/${order.customer.DisplayName}`}
+            >
+              {' '}
+              <p>
+                <span className="desc">Name</span>
+                {order.customer.DisplayName}
+              </p>
+            </Link>
           }
           <p>
             <span className="desc">Year</span>

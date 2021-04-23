@@ -93,13 +93,18 @@ const SearchCustomer = () => {
     const { signal } = controller;
     const result = async (signal) => {
       try {
-        const result = await fetch('http://localhost:5000/api/search', {
-          signal,
-          credentials: 'include',
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: values.search }),
-        });
+        const result = await fetch(
+          `http://${
+            process.env.REACT_APP_DOMAIN || 'localhost:5000'
+          }/api/search`,
+          {
+            signal,
+            credentials: 'include',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: values.search }),
+          }
+        );
         const body = await result.json();
         setSearchResults(body);
       } catch (e) {

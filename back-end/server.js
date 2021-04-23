@@ -19,6 +19,7 @@ require('dotenv').config();
 
 const port = process.env.PORT || 5000;
 const uri = process.env.DB_URL;
+
 mongoose.connect(uri, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -42,7 +43,7 @@ app.use(
     name: process.env.KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 360000000000, secure: false, httpOnly: true },
+    cookie: { maxAge: 36000000000, secure: false, httpOnly: true },
     store: MongoStore.create({ mongoUrl: uri }),
   })
 );
@@ -54,6 +55,7 @@ io.on('connection', function (socket) {
     console.log('A user disconnected');
   });
 });
+app.use(express.static('public'));
 app.use('/', routes);
 http.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

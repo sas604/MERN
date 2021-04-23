@@ -13,7 +13,9 @@ const CreateJob = ({ customer }) => {
   // set customer in the state
   useEffect(() => dispatch({ type: 'setCx', cx: customer._id }), []);
   const [error, setError] = useState(false);
-  const url = `http://localhost:5000/api/createWorkOrder`;
+  const url = `http://${
+    process.env.REACT_APP_DOMAIN || 'localhost:5000'
+  }/api/createWorkOrder`;
   const options = {
     credentials: 'include',
     method: 'POST',
@@ -29,7 +31,7 @@ const CreateJob = ({ customer }) => {
     try {
       const res = await fetch(url, options);
       if (!res.ok) {
-        throw Error('Cant Create Work Order');
+        throw Error("Can't Create Work Order");
       } else {
         history.push('/dashboard/inProgress');
       }

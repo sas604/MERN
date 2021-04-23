@@ -1,10 +1,4 @@
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import WorkOrderList from './WorkOrdersList';
 
@@ -38,21 +32,20 @@ const DashboardStyles = styled.div`
 `;
 
 const WorkOrdersDashboard = () => {
-  const location = useLocation();
-  console.log(location.key);
-  //get all working orders from db
   const { status } = useParams();
 
-  const urlGet = `http://localhost:5000/api/getWorkOrders`;
+  const urlGet = `http://${
+    process.env.REACT_APP_DOMAIN || 'localhost:5000'
+  }/api/getWorkOrders`;
   const [refetch, setRefetch] = useState(false);
   const options = {
     credentials: 'include',
   };
   const [pendingFetch, error, data] = useFetch(urlGet, options, refetch);
-
   useEffect(() => {
-    console.log('1');
-    const socket = io('http://localhost:5000');
+    const socket = io(
+      `http://${process.env.REACT_APP_DOMAIN || 'localhost:5000'}`
+    );
 
     // socket.on('connect', () => {});
     socket.on('Hello', () => setRefetch((s) => !s));
@@ -87,16 +80,22 @@ const WorkOrdersDashboard = () => {
             <span className="count">{statuses.readyToBuild?.length}</span>
           </p>
         </NavLink>
-        <NavLink to={`/dashboard/readyToShip`}>
+        <NavLink to={`/dashboard/built`}>
           <p>
-            Ready to Ship{' '}
-            <span className="count">{statuses.readyToShip?.length}</span>
+            Built <span className="count">{statuses.built?.length}</span>
           </p>
         </NavLink>
+
         <NavLink to={`/dashboard/waitingForPayment`}>
           <p>
             Waiting on payment{' '}
             <span className="count">{statuses.waitingForPayment?.length}</span>
+          </p>
+        </NavLink>
+        <NavLink to={`/dashboard/readyToShip`}>
+          <p>
+            Ready to Ship{' '}
+            <span className="count">{statuses.readyToShip?.length}</span>
           </p>
         </NavLink>
       </nav>

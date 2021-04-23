@@ -12,13 +12,18 @@ const oauthClient = new OAuthClient({
   clientId: process.env.QUICKBOOKS_USER_NAME,
   clientSecret: process.env.QUICKBOOKS_USER_SECRET,
   environment: 'sandbox',
-  redirectUri: 'http://localhost:5000/api/callback',
+  redirectUri: process.env.DOMAIN || 'http://localhost:5000/api/callback',
 });
 
 exports.user = (req, res) => {
-  if (!req.session.user) res.status(403).json(null);
+  console.log(req.session.user);
+  if (!req.session.user) {
+    res.status(403).json(null);
+    return;
+  }
   if (req.session.user?.realmId !== '4620816365161933290') {
     res.status(403).json(null);
+    return;
   }
   res.json('user');
 };
@@ -222,11 +227,9 @@ exports.getWorkOrder = async (req, res) => {
   }
 };
 exports.updateWorkOrder = async (req, res) => {
-  console.log(req.body);
   try {
     const order = await WorkOrder.findByIdAndUpdate(req.body._id, req.body);
-
-    res.status(200).json('success');
+    res.status(200).json('The order has been updated');
   } catch (e) {
     res.status(400).json(e);
   }
@@ -242,23 +245,28 @@ exports.updateStatusWithMail = async (req, res) => {
         },
       }
     ).populate('customer');
-    console.log(order);
-    order.services[0].done = true;
 
+    if (order.services[0].done) {
+      res.status(406).json('service alredy marked as finished');
+      return;
+    }
+    order.services[0].done = true;
+    order.save();
+
+    if (!order.customer.PrimaryEmailAddr.Address) {
+      res.status(200).json('No email address provided');
+      return;
+    }
     const options = {
       name: order.customer.DisplayName,
       address: order.customer.PrimaryEmailAddr.Address,
       number: order.invoice,
     };
-
     send(options);
-    order.save();
 
     //
-    res.status(200).json('success');
+    res.status(200).json('Success');
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 };
-// new mongoose.Types.ObjectId(req.body.service)

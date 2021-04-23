@@ -12,9 +12,15 @@ const AddServiceModalStyles = styled.div`
     margin: 0.5rem 0;
   }
   input,
-  textarea {
+  textarea,
+  select {
     padding: 0.5rem 1rem;
     width: 100%;
+  }
+  select {
+    margin-top: 0.5rem;
+    display: block;
+    max-width: 200px;
   }
   input {
     text-transform: uppercase;
@@ -30,15 +36,22 @@ const AddService = ({ index, dispatch }) => {
     <AddServiceModalStyles>
       <h5>Add Service</h5>
       <label htmlFor="serviceTag">
-        Service Tag
-        <input
+        Please select a service
+        <select
           id="serviceTag"
-          type="text"
           name="serviceTag"
           value={values.serviceTag}
-          placeholder="Tag "
           onChange={updateValue}
-        />
+        >
+          <option></option>
+          <option value="TD">Tear Down</option>
+          <option value="RB">Rebuild</option>
+          <option value="CR">Cryo</option>
+          <option value="CH">CryoHeat</option>
+          <option value="MP">Micropolish</option>
+          <option value="MF">Magnaflux</option>
+          <option value="VB">Vapor Blasting</option>
+        </select>
       </label>
 
       <label htmlFor="desc">

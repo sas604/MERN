@@ -3,6 +3,9 @@ const userControler = require('../controllers/userController');
 const appControler = require('../controllers/appController');
 
 const router = express.Router();
+// router.get('/', (req, res) => {
+//   res.sendFile('index.html');
+// });
 router.get('/api/user', appControler.user);
 router.get('/api/login', appControler.login);
 router.get('/api/callback', appControler.callback);

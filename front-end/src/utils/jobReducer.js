@@ -7,7 +7,7 @@ export const initialState = {
   make: '',
   model: '',
   totalParts: '',
-  color: ['#FFFFFF', '#FFFFFF', '#FFFFFF'],
+  color: [],
   dateRecived: '',
   recived: '',
   shiping: '',
@@ -19,19 +19,10 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case 'updateValue':
       if (action.field === 'color') {
-        state.color[0] = action.value;
-        return { ...state };
+        if (!action.value) return { ...state };
+        return { ...state, color: [...state.color, action.value] };
       }
-      if (action.field === 'color-1') {
-        state.color[1] = action.value;
 
-        return { ...state };
-      }
-      if (action.field === 'color-2') {
-        state.color[2] = action.value;
-
-        return { ...state };
-      }
       return {
         ...set(state, action.field, action.value),
       };
@@ -40,14 +31,12 @@ export const reducer = (state, action) => {
     case 'setOrder':
       return { ...action.data };
     case 'del':
-      if (state.color.length === 1) {
+      if (!state.color.length) {
         return { ...state };
       }
       return {
         ...state,
-        color: state.color.filter(
-          (el) => el !== state.color[state.color.length - 1]
-        ),
+        color: [...state.color.slice(0, -1)],
       };
     case 'sort':
       return {

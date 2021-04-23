@@ -3,6 +3,9 @@ import AddService from './AddService';
 import Service from './Service';
 import { FiDelete } from 'react-icons/fi';
 
+const OptionStyle = styled.option`
+  background-color: ${({ value }) => value};
+`;
 const WorkOrderStyles = styled.div`
   margin-bottom: 1rem;
   fieldset + fieldset {
@@ -49,13 +52,27 @@ const WorkOrderStyles = styled.div`
     margin: 1rem 0;
     display: flex;
     align-items: center;
+    .selected-colors {
+      margin: 0 1rem;
+      display: flex;
+      align-items: center;
+      div {
+        width: 50px;
+        height: 50px;
+      }
+      * + * {
+        margin-left: 0.5rem;
+      }
+      button {
+        background-color: transparent;
+        color: var(--red);
+        cursor: pointer;
+        border: none;
+        font-size: 2rem;
+      }
+    }
     span {
       margin-right: 1rem;
-    }
-    button {
-      background-color: transparent;
-      color: var(--red);
-      cursor: pointer;
     }
   }
 `;
@@ -137,36 +154,30 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           />
         </label>
         <div className="colors">
-          <span>Color Tags:</span>
-          <input
-            type="color"
-            value={state.color[0]}
-            onChange={updateField('color')}
-          />
-          {state.color[0] !== '#FFFFFF' && (
-            <input
-              type="color"
-              value={state.color[1]}
-              onChange={updateField('color-1')}
-            />
-          )}
-          {state.color[1] !== '#FFFFFF' && (
-            <input
-              type="color"
-              value={state.color[2]}
-              onChange={updateField('color-2')}
-            />
-          )}
-          {/* TODO fix it  */}
-          {state.color[0] !== '#FFFFFF' && (
-            <button
-              type="button"
-              className="button"
-              onClick={() => dispatch({ type: 'del' })}
-            >
+          <span>Colors</span>
+          <select onChange={updateField('color')}>
+            <option></option>
+            <OptionStyle value="#c40000">Red</OptionStyle>
+            <OptionStyle value="#ff0303">Flow Red</OptionStyle>
+            <OptionStyle value="#ff8503">Orange</OptionStyle>
+            <OptionStyle value="#ffff00">Flow Yellow</OptionStyle>
+            <OptionStyle value="#e8be02">Yellow</OptionStyle>
+            <OptionStyle value="#d19d00">Gold</OptionStyle>
+            <OptionStyle value="#109401">Green</OptionStyle>
+            <OptionStyle value="#f2059f">Pink</OptionStyle>
+            <OptionStyle value="#fff">White</OptionStyle>
+            <OptionStyle value="#787878">Grey</OptionStyle>
+            <OptionStyle value="#000">Black</OptionStyle>
+            <OptionStyle value="#784000">Brown</OptionStyle>
+          </select>
+          <div className="selected-colors">
+            {state.color.map((color, i) => (
+              <div key={i} style={{ backgroundColor: color }}></div>
+            ))}
+            <button type="button" onClick={() => dispatch({ type: 'del' })}>
               <FiDelete />
             </button>
-          )}
+          </div>
         </div>
 
         <p>Recived By</p>

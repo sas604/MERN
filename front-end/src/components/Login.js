@@ -12,7 +12,11 @@ const Login = () => {
       {' '}
       <button
         onClick={() =>
-          fetch('http://localhost:5000/api/login')
+          fetch(
+            `http://${
+              process.env.REACT_APP_DOMAIN || 'localhost:5000'
+            }/api/login`
+          )
             .then((response) => response.json())
             .then((res) => (window.location = res))
         }
@@ -21,9 +25,14 @@ const Login = () => {
       </button>
       <button
         onClick={() =>
-          fetch('http://localhost:5000/api/getusers', {
-            credentials: 'include',
-          })
+          fetch(
+            `http://${
+              process.env.REACT_APP_DOMAIN || 'localhost:5000'
+            }/api/getusers`,
+            {
+              credentials: 'include',
+            }
+          )
             .then((response) => response.json())
             .then((res) => console.log(res))
         }

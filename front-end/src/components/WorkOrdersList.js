@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import ModalContentStyle from '../css/ModalStyles';
 import Order from './Order';
 import Portal from './Portal';
+import { ToastContext } from './Toast';
 
 const WorkStyles = styled.div`
   position: relative;
@@ -12,6 +13,7 @@ const WorkStyles = styled.div`
 `;
 
 const WorkOrderList = ({ orders }) => {
+  const { setMessage } = useContext(ToastContext);
   const [modal, setModal] = useState(false);
   const [updateData, setUpdateData] = useState({});
 
@@ -21,7 +23,9 @@ const WorkOrderList = ({ orders }) => {
     setModal(true);
   };
   const update = async (data) => {
-    const postUrl = `http://localhost:5000/api/updateWorkOrderStatus`;
+    const postUrl = `http://${
+      process.env.REACT_APP_DOMAIN || 'localhost:5000'
+    }/api/updateWorkOrderStatus`;
     const options = {
       credentials: 'include',
       method: 'POST',
@@ -30,15 +34,18 @@ const WorkOrderList = ({ orders }) => {
     };
     try {
       const res = await fetch(postUrl, options);
+      const message = await res.json();
       if (!res.ok) {
-        throw Error('Cant Update Order');
+        throw Error(message);
       } else {
         setModal(false);
         document.body.classList.remove('modal-open');
-        console.log('success');
+        setMessage(['success', message]);
       }
     } catch (e) {
-      console.log(e);
+      setModal(false);
+      document.body.classList.remove('modal-open');
+      setMessage(['error', e.message]);
     }
   };
 

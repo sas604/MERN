@@ -13,12 +13,17 @@ const CustomerInfo = ({ cx }) => {
   const formSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/updatesinglecx', {
-        credentials: 'include',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      });
+      const res = await fetch(
+        `http://${
+          process.env.REACT_APP_DOMAIN || 'localhost:5000'
+        }/api/updatesinglecx`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+        }
+      );
       if (!res.ok) {
         throw Error('Something bad happened');
       }
