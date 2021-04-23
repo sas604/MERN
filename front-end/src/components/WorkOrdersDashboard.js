@@ -1,7 +1,7 @@
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import WorkOrderList from './WorkOrdersList';
-
+import ClipLoader from 'react-spinners/ClipLoader';
 import useFetch from '../hooks/useFetch';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -52,7 +52,21 @@ const WorkOrdersDashboard = () => {
     return () => socket.disconnect();
   }, []);
 
+  if (pendingFetch)
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <ClipLoader loading={pendingFetch} />
+      </div>
+    );
   if (!data) return <h3>No orders</h3>;
+
   const statuses = data.reduce(
     (a, status) => ({ ...a, [status._id]: [...status.docs] }),
     {}

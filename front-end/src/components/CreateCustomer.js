@@ -1,10 +1,11 @@
-import { useReducer, useState } from 'react';
+import { useContext, useReducer, useState } from 'react';
 import CustomerForm from './CustomerForm';
 import { initialState, reducer } from '../utils/customerReducer';
 import { useHistory } from 'react-router';
+import { ToastContext } from './Toast';
 
 const CreateCustomer = () => {
-  const [status, setStatus] = useState('idle');
+  const { setMessage } = useContext(ToastContext);
   const [values, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
 
@@ -25,7 +26,6 @@ const CreateCustomer = () => {
   // handle form submit
   const createCx = async (e) => {
     e.preventDefault();
-    setStatus({ status: 'loading', msg: 'loading' });
     try {
       const res = await fetch(url, options);
       const msg = await res.json();
@@ -34,16 +34,14 @@ const CreateCustomer = () => {
           'Something went wrong while creating new customer. Make sure that cx name is unique'
         );
       }
+      setMessage(['success', msg]);
       history.replace(`customer/${values.DisplayName}`);
-
-      setStatus({ status: 'success', msg });
     } catch (e) {
-      setStatus({ status: 'error', msg: e.message });
+      setMessage(['error', e.message]);
     }
   };
   return (
     <div className="max-width">
-      {status !== 'idle' && <h6>{status.msg}</h6>}
       <h2>Create a new customer</h2>
       <form onSubmit={createCx}>
         <CustomerForm
@@ -56,7 +54,7 @@ const CreateCustomer = () => {
           type="submit"
           className="button button--blue button--block"
         >
-          Update
+          Create
         </button>
         <button
           className="button button--red button--block"

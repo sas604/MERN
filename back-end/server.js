@@ -43,7 +43,7 @@ app.use(
     name: process.env.KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 36000000000, secure: false, httpOnly: true },
+    cookie: { maxAge: 604800, secure: false, httpOnly: true },
     store: MongoStore.create({ mongoUrl: uri }),
   })
 );

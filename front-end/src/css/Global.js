@@ -50,6 +50,7 @@ fieldset{
   text-transform: uppercase;
 }
   .button {
+    max-width: 600px;
     border: 0;
     display:inline-block;
     background-color: var(--black);
