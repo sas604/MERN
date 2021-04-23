@@ -1,18 +1,19 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { reducer, initialState } from '../utils/jobReducer';
 import { useHistory } from 'react-router-dom';
 import OrderInfo from './OrderInfo';
+import { ToastContext } from './Toast';
 
 const CreateJob = ({ customer }) => {
   const history = useHistory();
-
+  const { setMessage } = useContext(ToastContext);
   const updateField = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   // set customer in the state
   useEffect(() => dispatch({ type: 'setCx', cx: customer._id }), []);
-  const [error, setError] = useState(false);
+
   const url = `http://${
     process.env.REACT_APP_DOMAIN || 'localhost:5000'
   }/api/createWorkOrder`;
@@ -25,18 +26,20 @@ const CreateJob = ({ customer }) => {
   const createOrder = async (e) => {
     e.preventDefault();
     if (state.services.length < 1) {
-      setError('Please add services');
+      setMessage(['error', 'Please add services']);
       return;
     }
     try {
       const res = await fetch(url, options);
+      const message = await res.json();
       if (!res.ok) {
-        throw Error("Can't Create Work Order");
+        throw Error(message);
       } else {
+        setMessage(['success', message]);
         history.push('/dashboard/inProgress');
       }
     } catch (e) {
-      setError(e);
+      setMessage(['error', e.message]);
     }
   };
 

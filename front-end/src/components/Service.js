@@ -4,7 +4,6 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from 'react-icons/md';
-import moveArray from '../utils/arrayMove';
 const ServiceStyles = styled.div`
   &:not(:first-of-type) {
     margin-top: 1rem;
@@ -50,7 +49,6 @@ const ServiceStyles = styled.div`
   }
 `;
 const Service = ({ description, dispatch, index, serviceTag }) => {
-  //TODO sort
   return (
     <ServiceStyles>
       <div className="controls">

@@ -55,14 +55,14 @@ const WorkOrderStyles = styled.div`
     .selected-colors {
       margin: 0 1rem;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       div {
         width: 50px;
         height: 50px;
+        margin: 0.5rem;
       }
-      * + * {
-        margin-left: 0.5rem;
-      }
+
       button {
         background-color: transparent;
         color: var(--red);

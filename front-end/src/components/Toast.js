@@ -9,11 +9,12 @@ const ToastStyle = styled.div`
   z-index: 50;
   animation: slidein 0.5s linear 1s both;
   p {
-    padding: 1rem 3rem;
-    line-height: 3rem;
+    padding: 1.5rem 3rem;
     font-weight: 700;
     border-radius: 10px;
+    line-height: 1.3;
     background-color: #cfcfcf;
+    width: 300px;
   }
   .success {
     background-color: #bafaba;

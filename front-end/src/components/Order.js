@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { MdExpandMore, MdExpandLess, MdCheck } from 'react-icons/md';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { ToastContext } from './Toast';
 
 const OrderStyles = styled.div`
   margin: 1rem 0;
@@ -45,10 +46,12 @@ const OrderStyles = styled.div`
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    & li {
+    li {
       font-size: 1.3rem;
       margin: 0;
+    }
+    li + li {
+      margin-left: 0.5rem;
     }
     span {
       text-align: center;
@@ -156,6 +159,7 @@ const ClorSpan = styled.span`
 `;
 
 const Order = ({ order, startUpdate }) => {
+  const { setMessage } = useContext(ToastContext);
   const updateStatus = (id) => async (e) => {
     const postUrl = `http://${
       process.env.REACT_APP_DOMAIN || 'localhost:5000'
@@ -170,15 +174,16 @@ const Order = ({ order, startUpdate }) => {
       }),
     };
     try {
-      console.log(options);
       const res = await fetch(postUrl, options);
+      const message = await res.json();
       if (!res.ok) {
-        throw Error('Cant Update Order');
+        throw Error(message);
       } else {
-        console.log('success');
+        console.log(message);
+        setMessage(['success', message]);
       }
     } catch (e) {
-      console.log(e);
+      setMessage(['error', e.message]);
     }
   };
   const [more, setMore] = useState(false);

@@ -1,11 +1,13 @@
 // accept customer object
 import { reducer } from '../utils/customerReducer';
-import { useReducer } from 'react';
+import { useContext, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import CustomerForm from './CustomerForm';
+import { ToastContext } from './Toast';
 
 const CustomerInfo = ({ cx }) => {
   const history = useHistory();
+  const { setMessage } = useContext(ToastContext);
   const [values, dispatch] = useReducer(reducer, cx);
   const updateValue = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
@@ -24,12 +26,14 @@ const CustomerInfo = ({ cx }) => {
           body: JSON.stringify(values),
         }
       );
+      const message = await res.json();
       if (!res.ok) {
-        throw Error('Something bad happened');
+        throw Error(message);
       }
+      setMessage(['success', message]);
       history.go(-1);
     } catch (e) {
-      console.log(e);
+      setMessage(['error', e.message]);
     }
   };
   return (

@@ -7,7 +7,7 @@ import {
 } from 'react-router';
 import useFetch from '../hooks/useFetch';
 import CustomerInfo from './CustomerInfo';
-
+import ClipLoader from 'react-spinners/ClipLoader';
 import { Link } from 'react-router-dom';
 import CreateJob from './CreateJob';
 import WorkOrderList from './WorkOrdersList';
@@ -28,14 +28,20 @@ const Customer = () => {
     process.env.REACT_APP_DOMAIN || 'localhost:5000'
   }/api/get/${name}`;
   const [pendingFetch, error, data] = useFetch(urlGet, options, location.key);
+  if (!data || pendingFetch)
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <ClipLoader loading={pendingFetch} />
+      </div>
+    );
 
-  // post  data to server
-
-  // reducer
-
-  // set data to reducer when it loads
-
-  if (pendingFetch || !data) return <h1>Loading...</h1>;
   if (error) return <h1>Oh snap errror</h1>;
 
   return (

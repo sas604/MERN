@@ -21,6 +21,7 @@ const UpdateOrder = () => {
   const [pendingFetch, error, data] = useFetch(urlGet, {
     credentials: 'include',
   });
+  if (error) setMessage(['error', error]);
   useEffect(() => dispatch({ type: 'setOrder', data }), [data]);
 
   const updateWorkOrder = async () => {
@@ -48,7 +49,7 @@ const UpdateOrder = () => {
   };
   if (pendingFetch || !data?._id) return <h1>Loading...</h1>;
   return (
-    <>
+    <div className="max-width">
       <h1>Updtae Work Order- #{state.invoice}</h1>
       <OrderInfo dispatch={dispatch} state={state} updateField={updateField} />
       <button
@@ -66,7 +67,7 @@ const UpdateOrder = () => {
       >
         UPDATE
       </button>
-    </>
+    </div>
   );
 };
 

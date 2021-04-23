@@ -175,11 +175,9 @@ exports.updateCx = async (req, res) => {
   }
 };
 exports.createWorkOrder = async (req, res) => {
-  // TODO make this functional
-  console.log(req.body);
   try {
     const order = await new WorkOrder(req.body).save();
-    res.status(200).json('success');
+    res.status(200).json(`Successfully created work order #${order.invoice}`);
   } catch (e) {
     console.error(e);
     res.status(400).json(e);

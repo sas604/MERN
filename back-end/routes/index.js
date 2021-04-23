@@ -51,5 +51,7 @@ router.post(
   appControler.checkCredentials,
   appControler.updateStatusWithMail
 );
-
+router.get('*', (req, res) => {
+  res.redirect('/');
+});
 module.exports = router;

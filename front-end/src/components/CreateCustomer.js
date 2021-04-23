@@ -1,4 +1,4 @@
-import { useContext, useReducer, useState } from 'react';
+import { useContext, useReducer } from 'react';
 import CustomerForm from './CustomerForm';
 import { initialState, reducer } from '../utils/customerReducer';
 import { useHistory } from 'react-router';
