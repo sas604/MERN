@@ -25,7 +25,7 @@ exports.send = async (options) => {
   const mailOptions = {
     from: 'Alex <noreply@example.com>',
     to: options.address,
-    subject: 'order-info',
+    subject: `Your order #${options.number} has been ${options.service}`,
     html,
     text,
   };

@@ -24,9 +24,7 @@ const Customer = () => {
   const location = useLocation();
 
   // get user from the server
-  const urlGet = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/get/${name}`;
+  const urlGet = `${process.env.REACT_APP_DOMAIN}/api/get/${name}`;
   const [pendingFetch, error, data] = useFetch(urlGet, options, location.key);
   if (!data || pendingFetch)
     return (

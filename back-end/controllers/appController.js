@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Customer = require('../models/Customer');
 const WorkOrder = require('../models/WorkOrder');
 const { send } = require('../mail/mail');
+const servicesName = require('../utils/services');
 
 // TODO make dynamic
 const companyID = '4620816365161933290';
@@ -48,14 +49,15 @@ exports.callback = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-  res.redirect('http://localhost:3000/');
+  res.redirect(process.env.DOMAIN ? '/' : 'http://localhost:3000/');
 };
 
 exports.checkCredentials = async (req, res, next) => {
   // check the is token exist
-  console.log(req.session.user.realmId);
+  console.log('user', req.session.user);
+  console.log(req.session.user?.realmId);
 
-  if (!oauthClient.isAccessTokenValid(req.session.user.accesToken)) {
+  if (!oauthClient.isAccessTokenValid(req.session?.user.accesToken)) {
     // if token is invalid try to refresh it if success procide
     try {
       await oauthClient.refreshUsingToken(req.session.user.refreshToken);
@@ -127,7 +129,6 @@ exports.createCustomer = async (req, res) => {
     // send customer Dispaly name and redirect to Customer page
     res.status(200).json('Succesfuly created customer ');
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 };
@@ -169,7 +170,7 @@ exports.updateCx = async (req, res) => {
       { new: true }
     );
 
-    res.json(newCx);
+    res.status(200).json('Successfully updated the customer.');
   } catch (e) {
     res.status(400).json(e);
   }
@@ -255,8 +256,10 @@ exports.updateStatusWithMail = async (req, res) => {
       res.status(200).json('No email address provided');
       return;
     }
+    console.log(order.customer);
     const options = {
-      name: order.customer.DisplayName,
+      service: servicesName[order.services[0].serviceTag],
+      name: order.customer.GivenName || order.customer.DisplayName,
       address: order.customer.PrimaryEmailAddr.Address,
       number: order.invoice,
     };
@@ -265,6 +268,7 @@ exports.updateStatusWithMail = async (req, res) => {
     //
     res.status(200).json('Success');
   } catch (e) {
+    console.log(e);
     res.status(400).json(e);
   }
 };

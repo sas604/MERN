@@ -12,9 +12,7 @@ const UpdateOrder = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // get the  order
 
-  const urlGet = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/getWorkOrder/${orderId}`;
+  const urlGet = `${process.env.REACT_APP_DOMAIN}/api/getWorkOrder/${orderId}`;
   const updateField = (field) => (e) => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };

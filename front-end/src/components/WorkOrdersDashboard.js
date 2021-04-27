@@ -34,9 +34,7 @@ const DashboardStyles = styled.div`
 const WorkOrdersDashboard = () => {
   const { status } = useParams();
 
-  const urlGet = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/getWorkOrders`;
+  const urlGet = `${process.env.REACT_APP_DOMAIN}/api/getWorkOrders`;
   const [refetch, setRefetch] = useState(false);
   const options = {
     credentials: 'include',
@@ -44,7 +42,7 @@ const WorkOrdersDashboard = () => {
   const [pendingFetch, error, data] = useFetch(urlGet, options, refetch);
   useEffect(() => {
     const socket = io(
-      `http://${process.env.REACT_APP_DOMAIN || 'localhost:5000'}`
+      `${process.env.REACT_APP_DOMAIN || 'https://cryoheatdash.com'}`
     );
 
     // socket.on('connect', () => {});

@@ -94,9 +94,7 @@ const SearchCustomer = () => {
     const result = async (signal) => {
       try {
         const result = await fetch(
-          `http://${
-            process.env.REACT_APP_DOMAIN || 'localhost:5000'
-          }/api/search`,
+          `${process.env.REACT_APP_DOMAIN}/api/search`,
           {
             signal,
             credentials: 'include',

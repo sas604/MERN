@@ -5,9 +5,7 @@ export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   //const [currentUser, setCurrentUser] = useState();
-  const url = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/user`;
+  const url = `${process.env.REACT_APP_DOMAIN}/api/user`;
 
   const [pendingFetch, error, data] = useFetch(url, {
     credentials: 'include',

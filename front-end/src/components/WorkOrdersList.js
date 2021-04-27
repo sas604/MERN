@@ -23,9 +23,7 @@ const WorkOrderList = ({ orders }) => {
     setModal(true);
   };
   const update = async (data) => {
-    const postUrl = `http://${
-      process.env.REACT_APP_DOMAIN || 'localhost:5000'
-    }/api/updateWorkOrderStatus`;
+    const postUrl = `${process.env.REACT_APP_DOMAIN}/api/updateWorkOrderStatus`;
     const options = {
       credentials: 'include',
       method: 'POST',

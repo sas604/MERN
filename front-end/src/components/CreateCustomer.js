@@ -13,9 +13,7 @@ const CreateCustomer = () => {
     dispatch({ type: 'updateValue', field, value: e.target.value });
   };
 
-  const url = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/createcustomer`;
+  const url = `${process.env.REACT_APP_DOMAIN}/api/createcustomer`;
   // options for the fetch
   const options = {
     credentials: 'include',

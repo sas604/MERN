@@ -14,9 +14,7 @@ const CreateJob = ({ customer }) => {
   // set customer in the state
   useEffect(() => dispatch({ type: 'setCx', cx: customer._id }), []);
 
-  const url = `http://${
-    process.env.REACT_APP_DOMAIN || 'localhost:5000'
-  }/api/createWorkOrder`;
+  const url = `${process.env.REACT_APP_DOMAIN}/api/createWorkOrder`;
   const options = {
     credentials: 'include',
     method: 'POST',

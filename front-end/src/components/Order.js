@@ -161,9 +161,7 @@ const ClorSpan = styled.span`
 const Order = ({ order, startUpdate }) => {
   const { setMessage } = useContext(ToastContext);
   const updateStatus = (id) => async (e) => {
-    const postUrl = `http://${
-      process.env.REACT_APP_DOMAIN || 'localhost:5000'
-    }/api/updateWorkOrder`;
+    const postUrl = `${process.env.REACT_APP_DOMAIN}/api/updateWorkOrder`;
     const options = {
       credentials: 'include',
       method: 'POST',

@@ -16,9 +16,7 @@ const CustomerInfo = ({ cx }) => {
     e.preventDefault();
     try {
       const res = await fetch(
-        `http://${
-          process.env.REACT_APP_DOMAIN || 'localhost:5000'
-        }/api/updatesinglecx`,
+        `${process.env.REACT_APP_DOMAIN}/api/updatesinglecx`,
         {
           credentials: 'include',
           method: 'POST',
