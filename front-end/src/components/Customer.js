@@ -13,6 +13,7 @@ import CreateJob from './CreateJob';
 import WorkOrderList from './WorkOrdersList';
 
 import CustomerInfoNoEdit from './CustomerInfoNoEdit';
+import OrderListSmall from './OrderListSmall';
 
 // customer component
 const Customer = () => {
@@ -47,11 +48,14 @@ const Customer = () => {
       <Switch>
         <Route exact path={path}>
           <CustomerInfoNoEdit cx={data.cx} />
-          <h2>Work Orders</h2>
-          <Link className="button" to={`${url}/add`}>
+          <Link
+            className="button"
+            style={{ marginTop: '1rem' }}
+            to={`${url}/add`}
+          >
             Add New Work Order
           </Link>
-          <WorkOrderList orders={data.workOrders} />
+          <OrderListSmall orders={data.workOrders} />
         </Route>
         <Route path={`${path}/edit`}>
           <CustomerInfo cx={data.cx} />

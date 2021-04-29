@@ -1,5 +1,4 @@
 const express = require('express');
-const userControler = require('../controllers/userController');
 const appControler = require('../controllers/appController');
 
 const router = express.Router();
@@ -50,6 +49,11 @@ router.post(
   '/api/updateWorkOrderStatus',
   appControler.checkCredentials,
   appControler.updateStatusWithMail
+);
+router.post(
+  '/api/shippingWithEmail',
+  appControler.checkCredentials,
+  appControler.shippingWithEmail
 );
 router.get('*', (req, res) => {
   res.redirect('/');

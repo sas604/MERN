@@ -19,8 +19,8 @@ const generateHTML = (filename, options = {}) => {
   return inlined;
 };
 
-exports.send = async (options) => {
-  const html = generateHTML('test', options);
+exports.send = async (template, options) => {
+  const html = generateHTML(template, options);
   const text = htmlToText.fromString(html);
   const mailOptions = {
     from: 'Alex <noreply@example.com>',

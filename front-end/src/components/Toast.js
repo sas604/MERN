@@ -15,6 +15,7 @@ const ToastStyle = styled.div`
     line-height: 1.3;
     background-color: #cfcfcf;
     width: 300px;
+    text-align: center;
   }
   .success {
     background-color: #bafaba;

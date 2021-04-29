@@ -233,6 +233,35 @@ exports.updateWorkOrder = async (req, res) => {
     res.status(400).json(e);
   }
 };
+
+exports.shippingWithEmail = async (req, res) => {
+  try {
+    const order = await WorkOrder.findOne({ _id: req.body._id }).populate(
+      'customer'
+    );
+    order.status = 'shipped';
+    order.tracking = req.body.tracking;
+    order.save();
+    if (!order.customer.PrimaryEmailAddr.Address || !req.body.tracking) {
+      res.status(200).json('Update without email confirmation');
+      return;
+    }
+    const options = {
+      name: order.customer.GivenName || order.customer.DisplayName,
+      address: order.customer.PrimaryEmailAddr.Address,
+      number: order.invoice,
+      tracking: req.body.tracking,
+      service: 'shipped',
+    };
+    send('shipping', options);
+
+    res.status(200).json('Success');
+  } catch (e) {
+    console.log(e);
+    res.status(400).json('Something went wrong ');
+  }
+};
+
 exports.updateStatusWithMail = async (req, res) => {
   try {
     const order = await WorkOrder.findOne(
@@ -246,7 +275,7 @@ exports.updateStatusWithMail = async (req, res) => {
     ).populate('customer');
 
     if (order.services[0].done) {
-      res.status(406).json('service alredy marked as finished');
+      res.status(406).json('Service alredy marked as finished');
       return;
     }
     order.services[0].done = true;
@@ -256,14 +285,14 @@ exports.updateStatusWithMail = async (req, res) => {
       res.status(200).json('No email address provided');
       return;
     }
-    console.log(order.customer);
+
     const options = {
       service: servicesName[order.services[0].serviceTag],
       name: order.customer.GivenName || order.customer.DisplayName,
       address: order.customer.PrimaryEmailAddr.Address,
       number: order.invoice,
     };
-    send(options);
+    send('test', options);
 
     //
     res.status(200).json('Success');

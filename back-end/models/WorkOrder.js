@@ -31,6 +31,7 @@ const workOrderSchema = mongoose.Schema(
       default: 'inProgress',
     },
     needsParts: Boolean,
+    tracking: String,
     whaitingForParts: Boolean,
     finished: {
       type: Boolean,

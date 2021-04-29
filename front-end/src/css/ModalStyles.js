@@ -8,8 +8,20 @@ const ModalContentStyle = styled.div`
   .promt {
     font-size: 1.2rem;
   }
+  label {
+    display: block;
+    margin: 1rem 0;
+    span {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  }
+
   button + button {
     margin-left: 1rem;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
   }
 `;
 
