@@ -160,8 +160,8 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
             <OptionStyle value="#c40000">Red</OptionStyle>
             <OptionStyle value="#ff0303">Flow Red</OptionStyle>
             <OptionStyle value="#ff8503">Orange</OptionStyle>
-            <OptionStyle value="#ffff00">Flow Yellow</OptionStyle>
-            <OptionStyle value="#e8be02">Yellow</OptionStyle>
+            <OptionStyle value="#ceff2b">Flow Yellow</OptionStyle>
+            <OptionStyle value="#fff42b">Yellow</OptionStyle>
             <OptionStyle value="#d19d00">Gold</OptionStyle>
             <OptionStyle value="#109401">Green</OptionStyle>
             <OptionStyle value="#f2059f">Pink</OptionStyle>

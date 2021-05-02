@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 const DashboardStyles = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   nav {
     display: flex;
     flex-wrap: wrap;

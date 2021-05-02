@@ -8,29 +8,20 @@ const Login = () => {
   if (user) return <Redirect to="/" />;
 
   return (
-    <>
+    <div style={{ padding: '6rem' }}>
       {' '}
       <button
+        className="button"
+        style={{ margin: '0 auto', display: 'block', maxWidth: '250px' }}
         onClick={() =>
           fetch(`${process.env.REACT_APP_DOMAIN}/api/login`)
             .then((response) => response.json())
             .then((res) => (window.location = res))
         }
       >
-        log to quickbooks
+        Login with quickbooks
       </button>
-      <button
-        onClick={() =>
-          fetch(`${process.env.REACT_APP_DOMAIN}/api/getusers`, {
-            credentials: 'include',
-          })
-            .then((response) => response.json())
-            .then((res) => console.log(res))
-        }
-      >
-        users
-      </button>{' '}
-    </>
+    </div>
   );
 };
 

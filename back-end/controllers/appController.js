@@ -61,7 +61,6 @@ exports.checkCredentials = async (req, res, next) => {
     // if token is invalid try to refresh it if success procide
     try {
       await oauthClient.refreshUsingToken(req.session.user.refreshToken);
-      console.log('refresh token');
       req.session.user = {
         accesToken: oauthClient.token.access_token,
         refreshToken: oauthClient.token.refresh_token,

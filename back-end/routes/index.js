@@ -6,6 +6,7 @@ const router = express.Router();
 //   res.sendFile('index.html');
 // });
 router.get('/api/user', appControler.user);
+router.get('/api/getusers', appControler.getUsers);
 router.get('/api/login', appControler.login);
 router.get('/api/callback', appControler.callback);
 router.get(

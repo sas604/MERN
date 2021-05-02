@@ -1,9 +1,10 @@
 const servicesName = {
-  TD: 'teared Down',
+  TD: 'torn down',
   RB: 'rebuilt',
   CR: 'cryo treated',
+  CH: 'cryo heat treated',
   MP: 'micro polished',
-  MF: 'mugnafluxed',
+  MF: 'magnafluxed',
   VB: 'vapor blasted',
 };
 
