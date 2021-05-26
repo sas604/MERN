@@ -158,6 +158,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
           <select onChange={updateField('color')}>
             <option></option>
             <OptionStyle value="#c40000">Red</OptionStyle>
+            <OptionStyle value="#2b49ff">Blue</OptionStyle>
             <OptionStyle value="#ff0303">Flow Red</OptionStyle>
             <OptionStyle value="#ff8503">Orange</OptionStyle>
             <OptionStyle value="#ceff2b">Flow Yellow</OptionStyle>
