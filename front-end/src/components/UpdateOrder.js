@@ -23,7 +23,7 @@ const UpdateOrder = () => {
   useEffect(() => dispatch({ type: 'setOrder', data }), [data]);
 
   const updateWorkOrder = async () => {
-    const postUrl = `http://${
+    const postUrl = `${
       process.env.REACT_APP_DOMAIN || 'localhost:5000'
     }/api/updateWorkOrder`;
     const options = {
