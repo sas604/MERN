@@ -183,6 +183,18 @@ exports.createWorkOrder = async (req, res) => {
     res.status(400).json(e);
   }
 };
+
+// Delete Work order
+exports.deleteOrder = async (req, res) => {
+  try {
+    const boop = await WorkOrder.deleteOne({ _id: req.params.invoice });
+    console.log(boop);
+    res.status(200).json('The order has been deleted');
+  } catch (e) {
+    res.status(400).json(e);
+  }
+};
+
 exports.getWorkOrders = async (req, res) => {
   // TODO make this functional
   try {

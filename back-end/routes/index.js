@@ -41,6 +41,11 @@ router.get(
   appControler.checkCredentials,
   appControler.getWorkOrder
 );
+router.get(
+  '/api/delete/:invoice',
+  appControler.checkCredentials,
+  appControler.deleteOrder
+);
 router.post(
   '/api/updateWorkOrder',
   appControler.checkCredentials,

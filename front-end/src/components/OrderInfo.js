@@ -170,6 +170,7 @@ const OrderInfo = ({ state, updateField, dispatch }) => {
             <OptionStyle value="#787878">Grey</OptionStyle>
             <OptionStyle value="#000">Black</OptionStyle>
             <OptionStyle value="#784000">Brown</OptionStyle>
+            <OptionStyle value="#663399">Purple</OptionStyle>
           </select>
           <div className="selected-colors">
             {state.color.map((color, i) => (

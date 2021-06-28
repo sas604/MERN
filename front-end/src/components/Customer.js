@@ -14,6 +14,7 @@ import WorkOrderList from './WorkOrdersList';
 
 import CustomerInfoNoEdit from './CustomerInfoNoEdit';
 import OrderListSmall from './OrderListSmall';
+import { useEffect, useState } from 'react';
 
 // customer component
 const Customer = () => {
@@ -23,10 +24,19 @@ const Customer = () => {
     credentials: 'include',
   };
   const location = useLocation();
+  console.log(location.key);
+  const [refetch, setRefetch] = useState(1);
+  // this is so dumb find a way to do it better, you listenig on location change to refresh the page and also use it in del order
+  const change = () => {
+    setRefetch((s) => s + 1);
+  };
+  useEffect(() => {
+    if (!data || pendingFetch) return;
+    change();
+  }, [location.key]);
 
-  // get user from the server
   const urlGet = `${process.env.REACT_APP_DOMAIN}/api/get/${name}`;
-  const [pendingFetch, error, data] = useFetch(urlGet, options, location.key);
+  const [pendingFetch, error, data] = useFetch(urlGet, options, refetch);
   if (!data || pendingFetch)
     return (
       <div
@@ -55,7 +65,7 @@ const Customer = () => {
           >
             Add New Work Order
           </Link>
-          <OrderListSmall orders={data.workOrders} />
+          <OrderListSmall orders={data.workOrders} setRefetch={change} />
         </Route>
         <Route path={`${path}/edit`}>
           <CustomerInfo cx={data.cx} />
