@@ -89,7 +89,7 @@ const CustomerForm = ({ values, updateValue, dispatch }) => {
           <input
             type="email"
             name="PrimaryEmailAddr.Address"
-            value={values.PrimaryEmailAddr.Address || ''}
+            value={values.PrimaryEmailAddr?.Address || ''}
             onChange={updateValue('PrimaryEmailAddr.Address')}
           />
         </label>
