@@ -39,6 +39,13 @@ const LayoutStyle = styled.div`
     grid-column: 1/-1;
     grid-row: 1;
     padding: 3rem 0.5rem;
+    & > span {
+      text-align: left;
+      position: absolute;
+      right: 0;
+      top: 0;
+      opacity: 0.5;
+    }
   }
   &.open {
     .sidebar {
@@ -66,6 +73,7 @@ const Layout = ({ sidebar, children }) => {
       <LayoutStyle className={`${open ? 'open' : 'close'}`}>
         <div className="sidebar">{sidebar}</div>
         <div className="main">
+          <span style={{ textAlign: 'left' }}>V0.0.5</span>
           <button
             className="nav-btn"
             onClick={() => setOpen((s) => !s)}

@@ -2,19 +2,22 @@ const OAuthClient = require('intuit-oauth');
 require('dotenv').config();
 const querystring = require('querystring');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const Customer = require('../models/Customer');
 const WorkOrder = require('../models/WorkOrder');
 const { send } = require('../mail/mail');
 const servicesName = require('../utils/services');
 
 // TODO make dynamic
-const companyID = '4620816365161933290';
+const companyID = process.env.COMPANYID;
 const oauthClient = new OAuthClient({
   clientId: process.env.QUICKBOOKS_USER_NAME,
   clientSecret: process.env.QUICKBOOKS_USER_SECRET,
-  environment: 'sandbox',
+  environment: process.env.NODE_ENV,
   redirectUri: process.env.DOMAIN || 'http://localhost:5000/api/callback',
 });
+
+let notification = [];
 
 exports.user = (req, res) => {
   console.log(req.session.user);
@@ -22,7 +25,7 @@ exports.user = (req, res) => {
     res.status(403).json(null);
     return;
   }
-  if (req.session.user?.realmId !== '4620816365161933290') {
+  if (req.session.user?.realmId !== companyID) {
     res.status(403).json(null);
     return;
   }
@@ -54,8 +57,6 @@ exports.callback = async (req, res) => {
 
 exports.checkCredentials = async (req, res, next) => {
   // check the is token exist
-  console.log('user', req.session.user);
-  console.log(req.session.user?.realmId);
 
   if (!oauthClient.isAccessTokenValid(req.session?.user.accesToken)) {
     // if token is invalid try to refresh it if success procide
@@ -78,14 +79,14 @@ exports.checkCredentials = async (req, res, next) => {
 
   // else try to avtorize it again
 };
-
+// TODO make it to hadle more than 1000 cx
 exports.getUsers = async (req, res) => {
   const query = querystring.escape('select * from Customer');
 
   try {
     console.log('try to call');
     const response = await oauthClient.makeApiCall({
-      url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/query?query=${query}&minorversion=57`,
+      url: `${process.env.QUICKBOOKSURL}${companyID}/query?query=${query}&minorversion=57`,
     });
     const cx = response.json.QueryResponse.Customer;
     const storesArray = [...cx];
@@ -116,15 +117,17 @@ exports.createCustomer = async (req, res) => {
   try {
     // make POST to intuit to save CX
     const response = await oauthClient.makeApiCall({
-      url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/customer?minorversion=57`,
+      url: `${process.env.QUICKBOOKSURL}${companyID}/customer?minorversion=57`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(req.body),
     });
+    console.log(response);
     const cx = JSON.parse(response.body);
-    const newCX = await new Customer(cx.Customer).save(); // store new CX in the DB
+    const newCX = await new Customer(cx.Customer).save();
+    console.log(newCX); // store new CX in the DB
     // send customer Dispaly name and redirect to Customer page
     res.status(200).json('Succesfuly created customer ');
   } catch (e) {
@@ -150,12 +153,13 @@ exports.getCx = async (req, res) => {
 };
 exports.updateCx = async (req, res) => {
   const data = req.body;
+  const id = data._id;
   delete data._id;
   delete data.__v;
   data.sparse = true;
   try {
     const response = await oauthClient.makeApiCall({
-      url: `https://sandbox-quickbooks.api.intuit.com/v3/company/${companyID}/customer?minorversion=57`,
+      url: `${process.env.QUICKBOOKSURL}${companyID}/customer?minorversion=57`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -163,14 +167,15 @@ exports.updateCx = async (req, res) => {
       body: JSON.stringify(data),
     });
     const cx = JSON.parse(response.body);
+    console.log(cx);
     const newCx = await Customer.findOneAndUpdate(
-      { DisplayName: cx.Customer.DisplayName },
-      { $set: cx.Customer },
-      { new: true }
+      { Id: cx.Customer.Id },
+      cx.Customer
     );
-
-    res.status(200).json('Successfully updated the customer.');
+    console.log(newCx);
+    res.status(200).json({ name: encodeURIComponent(cx.Customer.DisplayName) });
   } catch (e) {
+    console.log(e);
     res.status(400).json(e);
   }
 };
@@ -310,5 +315,56 @@ exports.updateStatusWithMail = async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(400).json(e);
+  }
+};
+
+// functionality to update customers if there a change in QB
+exports.webhook = async (req, res) => {
+  const webhookPayload = JSON.stringify(req.body);
+  // get segnature from payload
+  const signature = req.get('intuit-signature');
+  console.log(webhookPayload);
+  if (!signature) {
+    return res.status(401).send('FORBIDDEN');
+  }
+  if (!webhookPayload) {
+    return res.status(200).send('success');
+  }
+  // hash werifier
+  const hash = crypto
+    .createHmac('sha256', process.env.WEBHOOK_VERIFIER_TOKEN)
+    .update(webhookPayload)
+    .digest('base64');
+  if (signature === hash) {
+    notification.push(req.body.eventNotifications[0].dataChangeEvent.entities);
+    console.log(req.body.eventNotifications[0].dataChangeEvent.entities);
+    res.status(200).json('s');
+  } else {
+    return res.status(401).send('FORBIDDEN');
+  }
+};
+
+exports.checkNotification = async (req, res, next) => {
+  if (!notification.length) {
+    next();
+  } else {
+    try {
+      for (const entity of notification) {
+        const responseCX = await oauthClient.makeApiCall({
+          url: `${process.env.QUICKBOOKSURL}${companyID}/customer/${entity[0].id}?minorversion=59`,
+        });
+        const { Customer: cx } = responseCX.json;
+        const result = await Customer.findOneAndUpdate(
+          { Id: cx.Id },
+          { $set: cx },
+          { new: true, upsert: true }
+        );
+      }
+      notification = [];
+    } catch (e) {
+      console.log(e);
+    } finally {
+      next();
+    }
   }
 };

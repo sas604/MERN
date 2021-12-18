@@ -14,7 +14,12 @@ router.get(
   appControler.checkCredentials,
   appControler.getUsers
 );
-router.post('/api/search', appControler.search);
+router.post(
+  '/api/search',
+  appControler.checkCredentials,
+  appControler.checkNotification,
+  appControler.search
+);
 router.get('/api/get/:name', appControler.checkCredentials, appControler.getCx);
 router.post(
   '/api/updatesinglecx',
@@ -61,6 +66,7 @@ router.post(
   appControler.checkCredentials,
   appControler.shippingWithEmail
 );
+router.post('/api/webhook', appControler.webhook);
 router.get('*', (req, res) => {
   res.redirect('/');
 });

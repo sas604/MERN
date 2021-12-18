@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const customerSchema = mongoose.Schema({
   FullyQualifiedName: String,
   FamilyName: String,
@@ -25,7 +24,7 @@ const customerSchema = mongoose.Schema({
       type: String,
     },
     City: String,
-    PostalCode: Number,
+    PostalCode: String,
     Line1: String,
     Line2: String,
     Country: String,
@@ -33,7 +32,7 @@ const customerSchema = mongoose.Schema({
   ShipAddr: {
     CountrySubDivisionCode: String,
     City: String,
-    PostalCode: Number,
+    PostalCode: String,
     Line1: String,
     Line2: String,
     Country: String,

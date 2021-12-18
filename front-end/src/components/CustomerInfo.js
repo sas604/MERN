@@ -28,8 +28,9 @@ const CustomerInfo = ({ cx }) => {
       if (!res.ok) {
         throw Error(message);
       }
-      setMessage(['success', message]);
-      history.go(-1);
+      setMessage(['success', 'succesfuly create a customer']);
+      console.log(message);
+      history.push(`/customer/${message.name}`);
     } catch (e) {
       setMessage(['error', e.message]);
     }
